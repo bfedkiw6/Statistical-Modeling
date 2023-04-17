@@ -65,12 +65,13 @@ ExactAnalysis <- function() {
     # 0 * P(W = 0) + 1 * P(W = 1)
     # 0 * P(L1 = 1 and L2 = 2 or L1 = 2 and L2 = 1 or L1 = 1 and L2 = 1 and L3 = 1) + 1 * P(L_1 = 2 and L_2 = 2 or L_1 = 1 and L_2 = 1 and L_3 = 2)
 
-    q_vect[5] <- 0 + 1 * (0.5 * 0.5 * 0.5 + 0.5 * 0.5)
+    q_vect[5] <- 0 * (0.5 * 0.5 + 0.5 * 0.5 + 0.5 * 0.5 * 0.5) + 1 * (0.5 * 0.5 * 0.5 + 0.5 * 0.5)
 
 
     # Var(W)
+    # E[X^2] = 0^2 * (0.5 * 0.5 + 0.5 * 0.5 + 0.5 * 0.5 * 0.5) + 1^2 * (0.5 * 0.5 * 0.5 + 0.5 * 0.5)
 
-    q_vect[6] <-
+    q_vect[6] <- ( 0^2 * (0.5 * 0.5 + 0.5 * 0.5 + 0.5 * 0.5 * 0.5) + 1^2 * (0.5 * 0.5 * 0.5 + 0.5 * 0.5) ) - (q_vect[5])^2
 
 
     # E(B_U)
@@ -91,9 +92,10 @@ ExactAnalysis <- function() {
 
     q_vect[8] <- 3 * (0.5 * 0.5 * 0.5) + 4 * (3 * (0.5 * 0.5 * 0.5)) + 5 * (4 * (0.5 * 0.5 * 0.5 * 0.5)) + 6 * (0.5 * 0.5 * 0.5 * 0.5 * 0.5)
 
+
     # Var(number of buses leaving the main station by time m)
 
-    q_vect[9] <-
+    q_vect[9] <- ( 3^2 * (0.5 * 0.5 * 0.5) + 4^2 * (3 * (0.5 * 0.5 * 0.5)) + 5^2 * (4 * (0.5 * 0.5 * 0.5 * 0.5)) + 6^2 * (0.5 * 0.5 * 0.5 * 0.5 * 0.5) ) - (q_vect[8])^2
 
 
     # E(number of buses leaving the main station by time m | W = k)
@@ -102,7 +104,12 @@ ExactAnalysis <- function() {
     # No combo of delay times where 6 buses can leave the station by t=5 and no bus leaves at t=3 and one bus leaves at t=4
 
     q_vect[10] <- 3 * (0.5 * 0.5 * 0.5) + 4 * (0.5 * 0.5 * 0.5) + 5 * (0.5 * 0.5 * 0.5 * 0.5)
+
+    return(q_vect)
 }
+
+# Testing ExactAnalysis
+print(ExactAnalysis())
 
 
 busSim <- function(m,p,v,k,r,q,nDays) {
