@@ -112,6 +112,10 @@ busSim <- function(m,p,v,k,r,q,nDays) {
     w_vals <- vector(length=nDays)  # set up space for the Ws
     x2_vals <- vector(length=nDays)
     wL_vals <- vector(length=nDays)
+
+
+    # Simulation
+
     for (day in 1:nDays) {
         # Generate L values until the passenger has boarded a bus,
         # then do the analysis using that vector of L values
@@ -119,6 +123,9 @@ busSim <- function(m,p,v,k,r,q,nDays) {
         w_vals[day] <- generateW(v, p, m)
         x2_vals[day] <- generateXn(v, p, m, 2)
     }
+
+
+    # Analysis
 
     # P(W = k)
     q_vect[1] <- mean(w_vals == k)
