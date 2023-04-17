@@ -127,8 +127,9 @@ busSim <- function(m,p,v,k,r,q,nDays) {
         # Generate L values until the passenger has boarded a bus,
         # then do the analysis using that vector of L values
         # TODO: See if this works for expected values and variance
-        w_vals[day] <- generateW(v, p, m)
-        x2_vals[day] <- generateXn(v, p, m, 2)
+        l_vals <- generateLVector(p, v)
+        # w_vals[day] <- generateW(v, p, m)
+        # x2_vals[day] <- generateXn(v, p, m, 2)
     }
 
 
@@ -142,34 +143,49 @@ busSim <- function(m,p,v,k,r,q,nDays) {
 
     # P(W = k | L1 = q)
 
+
+    return(q_vect)
 }
 
-generateW <- function(v,p,m) {
+#  generateW <- function(v,p,m) {
 
+#     tot <- v
+#     while (true) {
+#         tot <- tot + generateL(p)
+
+#         # Passenger got onto the bus
+#         if (tot >= m) break
+#     }
+
+#     # tot - m is the amount of time the passenger had to wait
+#     return(tot - m)
+# }
+
+generateLVector <- function(p, v) {
+
+    # e.g. if p = (0.2,0.2,0.6), choose 1 number at random from the set
+    # 1,2,3, with probabilities 0.2, 0.2 and 0.6, respectively
+
+    l_vect <- c()
     tot <- v
+    i <- 1
     while (true) {
-        tot <- tot + generateL(p)
+        l_vect[i] <- sample(1:length(p),1,prob=p)
+        tot <- tot + l_vect[i]
+        i <- i + 1
 
         # Passenger got onto the bus
         if (tot >= m) break
     }
 
-    # tot - m is the amount of time the passenger had to wait
-    return(tot - m)
+    return(l_vect)
 }
 
-generateL <- function(p) {
+# generateXn <- function(v, p, m, n) {
 
-    # e.g. if p = (0.2,0.2,0.6), choose 1 number at random from the set
-    # 1,2,3, with probabilities 0.2, 0.2 and 0.6, respectively
-    return(sample(1:length(p),1,prob=p))
-}
-
-generateXn <- function(v, p, m, n) {
-
-    x_n <- 0
-    for (i in 1:n) {
-        x_n <- x_n + generateL(p)
-    }
-    return(x_n)
-}
+#     x_n <- 0
+#     for (i in 1:n) {
+#         x_n <- x_n + generateL(p)
+#     }
+#     return(x_n)
+# }
