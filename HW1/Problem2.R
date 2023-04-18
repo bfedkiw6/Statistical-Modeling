@@ -1,5 +1,4 @@
 ExactAnalysis <- function() {
-    print("hello world")
     # Settings
     m <- 5  # Time passenger gets to stop of interest
     p <- c(0.5, 0.5)  # Probabilities of delay times between successive buses
@@ -116,72 +115,91 @@ print(ExactAnalysis())
 
 
 busSim <- function(m,p,v,k,r,q,nDays) {
-
-    q_vect <- c()
-
-    w_vals <- vector(length=nDays)  # set up space for the Ws
-    x2_vals <- vector(length=nDays)
-    wL_vals <- vector(length=nDays)
-
-
-    # Simulation
-
-    for (day in 1:nDays) {
-        # Generate L values until the passenger has boarded a bus,
-        # then do the analysis using that vector of L values
-        # TODO: See if this works for expected values and variance
-        l_vals <- generateLVector(p, v)
-        # w_vals[day] <- generateW(v, p, m)
-        # x2_vals[day] <- generateXn(v, p, m, 2)
-    }
-
-
-    # Analysis
-
-    # P(W = k)
-    q_vect[1] <- mean(w_vals == k)
-
-    # P(X_2 = r)
-    q_vect[2] <- mean(x2_vals == r)
-
-    # P(W = k | L1 = q)
-
-
-    return(q_vect)
+  
+  q_vect <- c()
+  
+  w_vals <- vector(length=nDays)  # set up space for the Ws
+  x2_vals <- vector(length=nDays)
+  wL_vals <- vector(length=nDays)
+  l1_vals <- vector(length=nDays)
+  pbus_vect <- vector(length=m)
+  
+  
+  # Simulation
+  
+  for (day in 1:nDays) {
+    # Generate L values until the passenger has boarded a bus,
+    # then do the analysis using that vector of L values
+    # TODO: See if this works for expected values and variance
+    l_vals <- generateLVector(p, v)
+    w_vals[day] <- generateW(v, p, m,l_vals)
+    # x2_vals[day] <- generateXn(v, p, m, 2)
+    l1_vals[day] <- return(l_vals[1]==q)
+    pbus_vect <- generatePbus(p,w_vals[day],pbus_vect,l_vals)
+  }
+  
+  
+  # Analysis
+  
+  # P(W = k)
+  q_vect[1] <- mean(w_vals == k)
+  
+  # P(X_2 = r)
+  q_vect[2] <- mean(x2_vals == r)
+  
+  # P(W = k | L1 = q)
+  if (l1_vals) {
+    q_vect[3] <- mean(w_vals == k)
+  }
+  # E(number of buses leaving the main station by time m)
+  q_vect[8] <- generateExpVal(pbus_vect)
+  # Var(number of buses leaving the main station by time m)
+  q_vect[9] <- generateVariance(pbus_vect, q_vect[8])
+  
+  return(q_vect)
 }
 
-#  generateW <- function(v,p,m) {
+generateW <- function(v,p,m,l_vals) {
+  i <- 0
+  tot <- v
+  while(true) {
+    tot <- tot + l_vals[i]
+  }
+  return(tot - m)
+}
 
-#     tot <- v
-#     while (true) {
-#         tot <- tot + generateL(p)
+generatePbus <- function(p,wait_time,pbus_vect,l_vals) {
+  tot <- 0
+  for (i in 1:length(l_vals)) {
+    tot <- tot * p[l_vals[i]]
+  }
+  if (wait_time == 0) {
+    pbus_vect[length(l_vals)] <- pbus_vect[length(l_vals)] + tot
+  } else {
+    pbus_vect[length(l_vals)-1] <- pbus_vect[length(l_vals)-1] + tot
+  }
+  return(pbus_vect)
+}
 
-#         # Passenger got onto the bus
-#         if (tot >= m) break
-#     }
 
-#     # tot - m is the amount of time the passenger had to wait
-#     return(tot - m)
-# }
-
-generateLVector <- function(p, v) {
-
-    # e.g. if p = (0.2,0.2,0.6), choose 1 number at random from the set
-    # 1,2,3, with probabilities 0.2, 0.2 and 0.6, respectively
-
-    l_vect <- c()
-    tot <- v
-    i <- 1
-    while (true) {
-        l_vect[i] <- sample(1:length(p),1,prob=p)
-        tot <- tot + l_vect[i]
-        i <- i + 1
-
-        # Passenger got onto the bus
-        if (tot >= m) break
-    }
-
-    return(l_vect)
+generateLVector <- function(p,v,m) {
+  
+  # e.g. if p = (0.2,0.2,0.6), choose 1 number at random from the set
+  # 1,2,3, with probabilities 0.2, 0.2 and 0.6, respectively
+  
+  l_vect <- c()
+  tot <- v
+  i <- 1
+  while (true) {
+    l_vect[i] <- sample(1:length(p),1,prob=p)
+    tot <- tot + l_vect[i]
+    i <- i + 1
+    
+    # Passenger got onto the bus
+    if (tot >= m) break
+  }
+  
+  return(l_vect)
 }
 
 # generateXn <- function(v, p, m, n) {
