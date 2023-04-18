@@ -84,7 +84,7 @@ ExactAnalysis <- function() {
 
 
     # E(number of buses leaving the main station by time m) (that left the station by time m?)
-    # 4, 5, or 6 buses can leave by t = 5
+    # 3, 4, 5, or 6 buses can leave by t = 5
     # P(3) = probability of buses 1 through 3 all having a delay of 2
     # P(4) = probability of buses 1 through 3 all having a delay of 2 except for one of them having a delay of 1
     # P(5) = probability of buses 1 through 4 all having a delay of 1 except for one of them having a delay of 2
@@ -95,12 +95,15 @@ ExactAnalysis <- function() {
 
     # Var(number of buses leaving the main station by time m)
 
-    q_vect[9] <- ( 3^2 * (0.5 * 0.5 * 0.5) + 4^2 * (3 * (0.5 * 0.5 * 0.5)) + 5^2 * (4 * (0.5 * 0.5 * 0.5 * 0.5)) + 6^2 * (0.5 * 0.5 * 0.5 * 0.5 * 0.5) ) - (q_vect[8])^2
+    q_vect[9] <- ( 9 * (0.5 * 0.5 * 0.5) + 16 * (3 * (0.5 * 0.5 * 0.5)) + 25 * (4 * (0.5 * 0.5 * 0.5 * 0.5)) + 36 * (0.5 * 0.5 * 0.5 * 0.5 * 0.5) ) - q_vect[8]^2
+    q_vect[11] <- (3-q_vect[8])^2 * (0.5 * 0.5 * 0.5) + (4-q_vect[8])^2 * (3 * (0.5 * 0.5 * 0.5)) + (5-q_vect[8])^2 * (4 * (0.5 * 0.5 * 0.5 * 0.5)) + (6-q_vect[8])^2 * (0.5 * 0.5 * 0.5 * 0.5 * 0.5)
+
 
 
     # E(number of buses leaving the main station by time m | W = k)
+    # If only 3 buses leave by t=5, no bus leaves at t=3 (L_1 = 2, L_2 = 2, L_3 = 2)
     # If only 4 buses leave by t=5, 1 combo without a bus leaving at t=3 (L_1 = 2, L_2 = 2, L_3 = 1)
-    # If only 5 buses leave by t=5, 1 combo without a bus leaving at t=3 (L_1 = 1, L_2 = 1, L_3 = 2, L_4 = 1, L_5 = 1)
+    # If only 5 buses leave by t=5, 1 combo without a bus leaving at t=3 (L_1 = 1, L_2 = 1, L_3 = 2, L_4 = 1)
     # No combo of delay times where 6 buses can leave the station by t=5 and no bus leaves at t=3 and one bus leaves at t=4
 
     q_vect[10] <- 3 * (0.5 * 0.5 * 0.5) + 4 * (0.5 * 0.5 * 0.5) + 5 * (0.5 * 0.5 * 0.5 * 0.5)
