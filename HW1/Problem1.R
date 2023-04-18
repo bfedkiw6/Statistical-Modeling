@@ -1,5 +1,4 @@
 admissionsProbs <- function() {
-
     # Create probabilities vector and make the data more easily accessible
     probs <- c()
     ucba <- UCBAdmissions

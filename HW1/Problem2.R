@@ -1,5 +1,5 @@
 ExactAnalysis <- function() {
-
+    print("hello world")
     # Settings
     m <- 5  # Time passenger gets to stop of interest
     p <- c(0.5, 0.5)  # Probabilities of delay times between successive buses
