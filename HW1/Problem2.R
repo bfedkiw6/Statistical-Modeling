@@ -60,7 +60,7 @@ ExactAnalysis <- function() {
     # E(W)
     # W can be 0 or 1
     # Can't be 2 since a bus would have to leave at t=3 or t=4 for a bus to leave at t=5 and the passenger would have boarded that bus
-    # Max wait time is 2 since max delay is 2 (Passenger can only wait up to a max of max delay - 1?)
+    # Max wait time is less than 2 since max delay is 2 (Passenger can only wait up to a max of max delay - 1?)
     # A = {0, 1}
     # 0 * P(W = 0) + 1 * P(W = 1)
     # 0 * P(L1 = 1 and L2 = 2 or L1 = 2 and L2 = 1 or L1 = 1 and L2 = 1 and L3 = 1) + 1 * P(L_1 = 2 and L_2 = 2 or L_1 = 1 and L_2 = 1 and L_3 = 2)
@@ -122,6 +122,7 @@ busSim <- function(m,p,v,k,r,q,nDays) {
     w_vals <- vector(length=nDays)  # set up space for the Ws
     x2_vals <- vector(length=nDays)
     wL_vals <- vector(length=nDays)
+    pw_vect <- vector(length=v-1)
 
 
     # Simulation
@@ -130,9 +131,14 @@ busSim <- function(m,p,v,k,r,q,nDays) {
         # Generate L values until the passenger has boarded a bus,
         # then do the analysis using that vector of L values
         # TODO: See if this works for expected values and variance
-        l_vals <- generateLVector(p, v)
+        l_vals <- generateLVector(p, v, m)
         # w_vals[day] <- generateW(v, p, m)
-        # x2_vals[day] <- generateXn(v, p, m, 2)
+        x2_vals[day] <- generateXn(v, p, m, 2, l_vals)
+        
+        for (i in 1:length(w_vals)) {
+          pw_vect <- generatePw(v, p, w_vals[i], pw_vect, l_vals)
+        }
+        
     }
 
 
@@ -145,6 +151,14 @@ busSim <- function(m,p,v,k,r,q,nDays) {
     q_vect[2] <- mean(x2_vals == r)
 
     # P(W = k | L1 = q)
+    
+    # E(W)
+    q_vect[5] <- generateExpVal(pw_vect)
+    
+    # Var(W)
+    q_vect[6] <- generateVariance(pw_vect, q_vect[6])
+    
+    
 
 
     return(q_vect)
@@ -164,7 +178,7 @@ busSim <- function(m,p,v,k,r,q,nDays) {
 #     return(tot - m)
 # }
 
-generateLVector <- function(p, v) {
+generateLVector <- function(p, v, m) {
 
     # e.g. if p = (0.2,0.2,0.6), choose 1 number at random from the set
     # 1,2,3, with probabilities 0.2, 0.2 and 0.6, respectively
@@ -172,7 +186,7 @@ generateLVector <- function(p, v) {
     l_vect <- c()
     tot <- v
     i <- 1
-    while (true) {
+    while (1) {
         l_vect[i] <- sample(1:length(p),1,prob=p)
         tot <- tot + l_vect[i]
         i <- i + 1
@@ -184,11 +198,41 @@ generateLVector <- function(p, v) {
     return(l_vect)
 }
 
-# generateXn <- function(v, p, m, n) {
-
-#     x_n <- 0
-#     for (i in 1:n) {
-#         x_n <- x_n + generateL(p)
-#     }
-#     return(x_n)
-# }
+ generateXn <- function(v, p, m, n, l_vals) {
+    x_n <- 0
+    # Loop over appropiate number of buses
+    for (i in 1:n) {
+        # Add appropiate delay to total time
+        x_n <- x_n + l_vals[i]
+    }
+    return(x_n)
+ }
+ 
+ generatePw <- function(v, p, wait_time, pw_vect, l_vals) {
+   tot <- 0
+   if (wait_time < v) {
+     for (i in 1:length(l_vals)) {
+       tot <- tot * p[l_vals[i]]
+     }
+   }
+   pw_vect[wait_time] <- tot
+   return(pw_vect)
+ }
+ 
+ generateExpVal <- function(exp_prob) {
+   tot <- 0
+   for (i in 1:length(exp_prob)) {
+     tot <- tot + (i * exp_prob[i])
+   }
+   return(tot)
+ }
+ 
+ generateVariance <- function(var_prob, exp_val) {
+   tot <- 0
+   for (i in 1:length(var_prob)) {
+     tot <- tot + (i^2 * var_prob[i])
+   }
+   return(tot - exp_val^2)
+ }
+ 
+ 
