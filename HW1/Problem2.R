@@ -215,7 +215,7 @@ generateLVector <- function(p, v, m) {
        tot <- tot * p[l_vals[i]]
      }
    }
-   pw_vect[wait_time] <- tot
+   pw_vect[wait_time] <- pw_vect[wait_time] + tot
    return(pw_vect)
  }
  
