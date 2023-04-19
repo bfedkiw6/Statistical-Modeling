@@ -234,10 +234,10 @@ busSim <- function(m,p,v,k,r,q,nDays) {
     q_vect[4] <- mean(bus_U_vals == 3)
 
     # E(B_U)
-    q_vect[7] <-
+    q_vect[7] <- mean(bus_U_vals)
 
     # E(number of buses leaving the main station by time m | W = k)
-    q_vect[10] <-
+    q_vect[10] <- mean(left_by_m[which(w_vals == k)])
 
     return(q_vect)
 }
