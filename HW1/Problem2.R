@@ -152,13 +152,13 @@ print(ExactAnalysis())
 
 
 # Simulates the delays for the day
-generateLVector <- function(p, v, m) {
+generateLVector <- function(p, m) {
 
     # e.g. if p = (0.2,0.2,0.6), choose 1 number at random from the set
     # 1,2,3, with probabilities 0.2, 0.2 and 0.6, respectively
 
     l_vect <- c()
-    tot <- v
+    tot <- 0
     i <- 1
     while (1) {
         l_vect[i] <- sample(1:length(p),1,prob=p)
@@ -179,7 +179,11 @@ checkLeftByM <- function(l_vals, m) {
         t <- t + l_vals[i]
 
         # i buses have left by t <= m
-        if (t >= m) return(i)
+        if (t == m) {
+          return(i)
+        } else if (t > m) {
+          return(i - 1)
+        }
     }
 }
 
@@ -212,11 +216,9 @@ busSim <- function(m,p,v,k,r,q,nDays) {
         # Generate L values until the passenger has boarded a bus,
         # then do the analysis using that vector of L values
 
-        l_vals <- generateLVector(p, v, m)
+        l_vals <- generateLVector(p, m)
         bus_U_vals[day] <- checkBusU(l_vals, v, m)
-        left_by_m <- checkLeftByM(l_vals, m)
-        # w_vals[day] <- generateW(v, p, m)
-        # x2_vals[day] <- generateXn(v, p, m, 2)
+        left_by_m[day] <- checkLeftByM(l_vals, m)
     }
 
 
