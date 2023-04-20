@@ -51,7 +51,7 @@ ExactAnalysis <- function() {
     # E(W)
     # W can be 0 or 1
     # Can't be 2 since a bus would have to leave at t=3 or t=4 for a bus to leave at t=5 and the passenger would have boarded that bus
-    # Max wait time is 2 since max delay is 2 (Passenger can only wait up to a max of max delay - 1?)
+    # Max wait time is less than 2 since max delay is 2 (Passenger can only wait up to a max of max delay - 1?)
     # A = {0, 1}
     # 0 * P(W = 0) + 1 * P(W = 1)
     # 0 * P(L1 = 1 and L2 = 2 or L1 = 2 and L2 = 1 or L1 = 1 and L2 = 1 and L3 = 1) + 1 * P(L_1 = 2 and L_2 = 2 or L_1 = 1 and L_2 = 1 and L_3 = 2)
@@ -118,16 +118,13 @@ ExactAnalysis <- function() {
     p <- c(0.5, 0.5)  # Probabilities of delay times between successive buses
     v <- 2  # Time it takes for a bus to reach stop of interest from main station
 
-
     # Constants in the quantities we are trying to find
     k <- 1
     r <- 3
     q <- 1
-
-
+    
     # Quantities vector
     q_vect <- vector(length=2)
-
 
     # P(X_2 = r)
     # = P(L_1 = 1 and L_2 = 2 or L_1 = 2 and L_2 = 1)
@@ -135,8 +132,7 @@ ExactAnalysis <- function() {
     # = P(L_1 = 1) * P(L_2 = 2) + P(L_1 = 2) * P(L_2 = 1)
 
     q_vect[1] <- 2 * (0.5 * 0.5)
-
-
+    
     # P(W = k | L_1 = q) (probability that passenger has to wait k=1 unit of time given the delay between B_1 and B_2 = q)
     # W here only has the case where L_1 = 1, L_2 = 1, and L_3 = 2 since L_1 has to be 1
     # = P(L_2 = 1 and L_3 = 2 | L_1 = 1)
@@ -149,7 +145,6 @@ ExactAnalysis <- function() {
 
 # Testing ExactAnalysis
 print(ExactAnalysis())
-
 
 # Simulates the delays for the day
 generateLVector <- function(p, m) {
@@ -171,7 +166,7 @@ generateLVector <- function(p, m) {
 
     return(l_vect)
 }
-
+ 
 # Checks how many buses left by t=m
 checkLeftByM <- function(l_vals, m) {
     t <- 0
@@ -219,6 +214,8 @@ busSim <- function(m,p,v,k,r,q,nDays) {
         l_vals <- generateLVector(p, m)
         bus_U_vals[day] <- checkBusU(l_vals, v, m)
         left_by_m[day] <- checkLeftByM(l_vals, m)
+        x2_vals[day] <- sum(l_vals[1:2])
+        w_vals_squared[day] <- w_vals[day]^2
     }
 
 
@@ -234,6 +231,12 @@ busSim <- function(m,p,v,k,r,q,nDays) {
 
     # P(U = 3)
     q_vect[4] <- mean(bus_U_vals == 3)
+    
+     # E(W)
+    q_vect[5] <- mean(wvals)
+    
+    # Var(W)
+    q_vect[6] <- mean(w_vals_squared)
 
     # E(B_U)
     q_vect[7] <- mean(bus_U_vals)
