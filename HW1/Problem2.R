@@ -122,7 +122,7 @@ busSim <- function(m,p,v,k,r,q,nDays) {
   x2_vals <- vector(length=nDays)
   wL_vals <- vector(length=nDays)
   l1_vals <- vector(length=nDays)
-  pbus_vect <- vector(length=m)
+  pbus_vect <- vector(length=nDays)
   
   
   # Simulation
@@ -134,8 +134,10 @@ busSim <- function(m,p,v,k,r,q,nDays) {
     l_vals <- generateLVector(p, v)
     w_vals[day] <- generateW(v, p, m,l_vals)
     # x2_vals[day] <- generateXn(v, p, m, 2)
-    l1_vals[day] <- return(l_vals[1]==q)
-    pbus_vect <- generatePbus(p,w_vals[day],pbus_vect,l_vals)
+    if(l_vals[i]==q) {
+      l1_vals[day] <- w_vals[day]
+    }
+    pbus_vect <- (left_by_m[day]*left_by_m[day])
   }
   
   
@@ -148,37 +150,26 @@ busSim <- function(m,p,v,k,r,q,nDays) {
   q_vect[2] <- mean(x2_vals == r)
   
   # P(W = k | L1 = q)
-  if (l1_vals) {
-    q_vect[3] <- mean(w_vals == k)
-  }
+    q_vect[3] <- mean(l1_vals == k)
   # E(number of buses leaving the main station by time m)
-  q_vect[8] <- generateExpVal(pbus_vect)
+  q_vect[8] <- mean(left_by_m)
   # Var(number of buses leaving the main station by time m)
-  q_vect[9] <- generateVariance(pbus_vect, q_vect[8])
+  q_vect[9] <- mean(pbus_vect)-(q_vect[8]*q_vect[8])
+
+  mean(w_vals)
   
   return(q_vect)
 }
 
-generateW <- function(v,p,m,l_vals) {
+generateW <- function(v,m,l_vals) {
   i <- 0
   tot <- v
   while(true) {
     tot <- tot + l_vals[i]
+    i <- i+1
+    if (i == length(l_vals)) break
   }
   return(tot - m)
-}
-
-generatePbus <- function(p,wait_time,pbus_vect,l_vals) {
-  tot <- 0
-  for (i in 1:length(l_vals)) {
-    tot <- tot * p[l_vals[i]]
-  }
-  if (wait_time == 0) {
-    pbus_vect[length(l_vals)] <- pbus_vect[length(l_vals)] + tot
-  } else {
-    pbus_vect[length(l_vals)-1] <- pbus_vect[length(l_vals)-1] + tot
-  }
-  return(pbus_vect)
 }
 
 
@@ -202,11 +193,3 @@ generateLVector <- function(p,v,m) {
   return(l_vect)
 }
 
-# generateXn <- function(v, p, m, n) {
-
-#     x_n <- 0
-#     for (i in 1:n) {
-#         x_n <- x_n + generateL(p)
-#     }
-#     return(x_n)
-# }
