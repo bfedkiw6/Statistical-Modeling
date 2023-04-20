@@ -134,11 +134,7 @@ busSim <- function(m,p,v,k,r,q,nDays) {
         l_vals <- generateLVector(p, v, m)
         # w_vals[day] <- generateW(v, p, m)
         x2_vals[day] <- generateXn(v, p, m, 2, l_vals)
-        
-        for (i in 1:length(w_vals)) {
-          pw_vect <- generatePw(v, p, w_vals[i], pw_vect, l_vals)
-        }
-        
+        w_vals_squared[day] <- w_vals[day]^2
     }
 
 
@@ -153,10 +149,10 @@ busSim <- function(m,p,v,k,r,q,nDays) {
     # P(W = k | L1 = q)
     
     # E(W)
-    q_vect[5] <- generateExpVal(pw_vect)
+    q_vect[5] <- mean(wvals)
     
     # Var(W)
-    q_vect[6] <- generateVariance(pw_vect, q_vect[6])
+    q_vect[6] <- mean(w_vals_squared)
     
     
 
@@ -208,31 +204,5 @@ generateLVector <- function(p, v, m) {
     return(x_n)
  }
  
- generatePw <- function(v, p, wait_time, pw_vect, l_vals) {
-   tot <- 0
-   if (wait_time < v) {
-     for (i in 1:length(l_vals)) {
-       tot <- tot * p[l_vals[i]]
-     }
-   }
-   pw_vect[wait_time] <- pw_vect[wait_time] + tot
-   return(pw_vect)
- }
- 
- generateExpVal <- function(exp_prob) {
-   tot <- 0
-   for (i in 1:length(exp_prob)) {
-     tot <- tot + (i * exp_prob[i])
-   }
-   return(tot)
- }
- 
- generateVariance <- function(var_prob, exp_val) {
-   tot <- 0
-   for (i in 1:length(var_prob)) {
-     tot <- tot + (i^2 * var_prob[i])
-   }
-   return(tot - exp_val^2)
- }
  
  
