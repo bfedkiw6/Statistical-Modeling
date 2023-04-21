@@ -84,18 +84,6 @@ checkBusU <- function(l_vals, v, m) {
     }
 }
 
-generateW <- function(v,m,l_vals) {
-
-  i <- 1
-  tot <- v
-  while (1) {
-    tot <- tot + l_vals[i]
-    i <- i+1
-    if (tot >= m) break
-  }
-  return(tot - m)
-}
-
 busSim <- function(m,p,v,k,r,q,nDays) {
 
     q_vect <- vector(length=10)
@@ -120,12 +108,9 @@ busSim <- function(m,p,v,k,r,q,nDays) {
         bus_U_vals[day] <- checkBusU(l_vals, v, m)
         left_by_m[day] <- checkLeftByM(l_vals, m)
         x2_vals[day] <- sum(l_vals[1:2])
-        w_vals[day] <- generateW(v, m, l_vals)
-        if (w_vals[day] == sum(l_vals[1:bus_U_vals[day]]) - m + v) print("true")
+        w_vals[day] <- sum(l_vals[1:bus_U_vals[day]]) - m + v
         w_vals_squared[day] <- w_vals[day]^2
-        if (l_vals[1] == q) {
-          l1_vals[day] <- w_vals[day]
-        }
+        l1_vals[day] <- l_vals[1]
         pbus_vect[day] <- left_by_m[day]^2
     }
 
@@ -139,8 +124,7 @@ busSim <- function(m,p,v,k,r,q,nDays) {
     q_vect[2] <- mean(x2_vals == r)
   
     # P(W = k | L1 = q)
-    # Instead, mean(w_vals[which(l1_vals == q)])
-    q_vect[3] <- mean(l1_vals == k)
+    q_vect[3] <- mean(w_vals[which(l1_vals == q)])
 
     # P(U = 3)
     q_vect[4] <- mean(bus_U_vals == 3)
