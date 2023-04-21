@@ -1,6 +1,7 @@
 admissionsProbs <- function() {
+
     # Create probabilities vector and make the data more easily accessible
-    probs <- c()
+    probs <- vector(length=9)
     ucba <- UCBAdmissions
 
 
@@ -62,5 +63,4 @@ admissionsProbs <- function() {
 }
 
 # Testing admissionsProbs()
-# print(UCBAdmissions)
-print(admissionsProbs())
+# print(admissionsProbs())
