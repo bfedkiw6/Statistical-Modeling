@@ -1,5 +1,4 @@
 ExactAnalysis <- function() {
-
     # Settings
     m <- 5  # Time passenger gets to stop of interest
     p <- c(0.5, 0.5)  # Probabilities of delay times between successive buses
@@ -195,13 +194,28 @@ checkBusU <- function(l_vals, v, m) {
     }
 }
 
+generateW <- function(v,m,l_vals) {
+  i <- 0
+  tot <- v
+  while(true) {
+    tot <- tot + l_vals[i]
+    i <- i+1
+    if (i == length(l_vals)) break
+  }
+  return(tot - m)
+}
+
 busSim <- function(m,p,v,k,r,q,nDays) {
 
     q_vect <- vector(length=10)
 
     w_vals <- vector(length=nDays)
+    w_vals_squared[day] <- vector(length=nDays)
+    x2_vals <- vector(length=nDays)
     bus_U_vals <- vector(length=nDays)
     left_by_m <- vector(length=nDays)
+    l1_vals <- vector(length=nDays)
+    pbus_vect <- vector(length=nDays)
 
 
     # Simulation
@@ -215,17 +229,29 @@ busSim <- function(m,p,v,k,r,q,nDays) {
         bus_U_vals[day] <- checkBusU(l_vals, v, m)
         left_by_m[day] <- checkLeftByM(l_vals, m)
         x2_vals[day] <- sum(l_vals[1:2])
+        w_vals[day] <- generateW(v, p, m,l_vals)
         w_vals_squared[day] <- w_vals[day]^2
+        if(l_vals[i]==q) {
+          l1_vals[day] <- w_vals[day]
+        }
+        pbus_vect <- (left_by_m[day]*left_by_m[day])
     }
 
 
     # Analysis
 
     # P(W = k)
-    #q_vect[1] <- mean(w_vals == k)
-
+    q_vect[1] <- mean(w_vals == k)
+  
     # P(X_2 = r)
-    #q_vect[2] <- mean(x2_vals == r)
+    q_vect[2] <- mean(x2_vals == r)
+  
+    # P(W = k | L1 = q)
+    q_vect[3] <- mean(l1_vals == k)
+
+    
+
+    mean(w_vals)
 
     # P(W = k | L1 = q)
 
@@ -240,6 +266,12 @@ busSim <- function(m,p,v,k,r,q,nDays) {
 
     # E(B_U)
     q_vect[7] <- mean(bus_U_vals)
+    
+    # E(number of buses leaving the main station by time m)
+    q_vect[8] <- mean(left_by_m)
+
+    # Var(number of buses leaving the main station by time m)
+    q_vect[9] <- mean(pbus_vect)-(q_vect[8]*q_vect[8])
 
     # E(number of buses leaving the main station by time m | W = k)
     q_vect[10] <- mean(left_by_m[which(w_vals == k)])
