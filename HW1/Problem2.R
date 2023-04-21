@@ -9,16 +9,6 @@ ExactAnalysis <- function() {
     k <- 1
     r <- 3
     q <- 1
-    # W is how long the passenger needs to wait at the stop for a bus to arrive
-    # Bus departures at X_i
-    # L_d is the time between departures of any two buses (independent of each other)
-    # P(L_d = j) = p_j (probability that the time between departures is a certain amount)
-    # P(L_d = 1) = 0.5
-    # P(L_d = 2) = 0.5
-
-    # First bus leaves at time 0, takes 2 units to get to station
-    # Second bus has a 50-50 chance of departing 1 unit or 2 units after first bus departs
-    # So on for any future buses
 
 
     # Quantities vector
@@ -30,7 +20,7 @@ ExactAnalysis <- function() {
     # = P(L_1 = 2 and L_2 = 2) + P(L_1 = 1 and L_2 = 1 and L_3 = 2)
     # = P(L_1 = 2) * P(L_2 = 2) + P(L_1 = 1) * P(L_2 = 1) * P(L_3 = 2)
 
-    q_vect[1] <- 0.5 * 0.5 + 0.5 * 0.5 * 0.5
+    q_vect[1] <- (0.5 * 0.5) + (0.5 * 0.5 * 0.5)
 
 
     # P(X_2 = r)
@@ -38,10 +28,11 @@ ExactAnalysis <- function() {
     # = P(L_1 = 1 and L_2 = 2) + P(L_1 = 2 and L_2 = 1)
     # = P(L_1 = 1) * P(L_2 = 2) + P(L_1 = 2) * P(L_2 = 1)
 
-    q_vect[2] <- 0.5 * 0.5 * 2
+    q_vect[2] <- 2 * (0.5 * 0.5)
 
 
-    # P(W = k | L_1 = q) (probability that passenger has to wait k=1 unit of time given the delay between B_0 and B_1 = q=1)
+    # P(W = k | L_1 = q) (probability that passenger has to wait k=1 unit of time given the delay between B_1 and B_2 = q)
+    # W here only has the case where L_1 = 1, L_2 = 1, and L_3 = 2 since L_1 has to be 1
     # = P(L_2 = 1 and L_3 = 2 | L_1 = 1)
     # = P(L_2 = 1 and L_3 = 2) (Since L_2 = 1 and L_3 = 2 is independent of L_1 = 1)
 
@@ -49,8 +40,8 @@ ExactAnalysis <- function() {
 
 
     # P(U = 3) (B_U is bus that passenger boards)
-    # B_2 must leave before t = 3
-    # P(L_1 = 1 and L_2 = 1); any other combination will lead to bus 2 leaving at t=3 meaning that the passenger will board bus 2
+    # B_2 must leave before t = 3 so that the passenger misses buses 1 and 2
+    # P(L_1 = 1 and L_2 = 1); any other combination will lead to bus 2 leaving at t=3 or greater meaning that the passenger will board bus 2
     # = P(L_1 = 1) * P(L_2 = 1)
 
     q_vect[4] <- 0.5 * 0.5
@@ -59,18 +50,22 @@ ExactAnalysis <- function() {
     # E(W)
     # W can be 0 or 1
     # Can't be 2 since a bus would have to leave at t=3 or t=4 for a bus to leave at t=5 and the passenger would have boarded that bus
-    # Max wait time is 2 since max delay is 2 (Passenger can only wait up to a max of max delay - 1?)
+    # Max wait time is less than 2 since max delay is 2 (Passenger can only wait up to a max of max delay - 1?)
     # A = {0, 1}
     # 0 * P(W = 0) + 1 * P(W = 1)
     # 0 * P(L1 = 1 and L2 = 2 or L1 = 2 and L2 = 1 or L1 = 1 and L2 = 1 and L3 = 1) + 1 * P(L_1 = 2 and L_2 = 2 or L_1 = 1 and L_2 = 1 and L_3 = 2)
 
-    q_vect[5] <- 0 * (0.5 * 0.5 + 0.5 * 0.5 + 0.5 * 0.5 * 0.5) + 1 * (0.5 * 0.5 * 0.5 + 0.5 * 0.5)
+    case_W0 <- 0 * (0.5 * 0.5 + 0.5 * 0.5 + 0.5 * 0.5 * 0.5)
+    case_W1 <- 1 * (0.5 * 0.5 * 0.5 + 0.5 * 0.5)
+    q_vect[5] <- case_W0 + case_W1
 
 
     # Var(W)
     # E[X^2] = 0^2 * (0.5 * 0.5 + 0.5 * 0.5 + 0.5 * 0.5 * 0.5) + 1^2 * (0.5 * 0.5 * 0.5 + 0.5 * 0.5)
 
-    q_vect[6] <- ( 0^2 * (0.5 * 0.5 + 0.5 * 0.5 + 0.5 * 0.5 * 0.5) + 1^2 * (0.5 * 0.5 * 0.5 + 0.5 * 0.5) ) - (q_vect[5])^2
+    case_W0_squared <- 0^2 * (0.5 * 0.5 + 0.5 * 0.5 + 0.5 * 0.5 * 0.5)
+    case_W1_squared <- 1^2 * (0.5 * 0.5 * 0.5 + 0.5 * 0.5)
+    q_vect[6] <- (case_W0_squared + case_W1_squared) - (q_vect[5])^2
 
 
     # E(B_U)
@@ -79,33 +74,70 @@ ExactAnalysis <- function() {
     # P(B_2) = P(L_1 = 1 and L_2 = 2 or L_1 = 2 and L_2 = 2 or L_1 = 2 and L_2 = 1)
     # P(B_3) = P(L_1 = 1 and L_2 = 1 and L_3 = 1 or L_1 = 1 and L_2 = 1 and L_3 = 2)
 
-    q_vect[7] <- 2 * (0.5 * 0.5 + 0.5 * 0.5 + 0.5 * 0.5) + 3 * (0.5 * 0.5 * 0.5 + 0.5 * 0.5 * 0.5)
+    case_BU2 <- 2 * (0.5 * 0.5 + 0.5 * 0.5 + 0.5 * 0.5)
+    case_BU3 <- 3 * (0.5 * 0.5 * 0.5 + 0.5 * 0.5 * 0.5)
+    q_vect[7] <- case_BU2 + case_BU3
 
 
-    # E(number of buses leaving the main station by time m) (that left the station by time m?)
-    # 3, 4, 5, or 6 buses can leave by t = 5
-    # P(3) = probability of buses 1 through 3 all having a delay of 2
-    # P(4) = probability of buses 1 through 3 all having a delay of 2 except for one of them having a delay of 1
-    # P(5) = probability of buses 1 through 4 all having a delay of 1 except for one of them having a delay of 2
-    # P(6) = probability of buses 1 through 5 all having a delay of 1
+    # E(number of buses leaving the main station by time m)
+    # 2, 3, 4, or 5 buses can leave by t = 5
+    # P(2) = Delays of (2, 2, 2)
+    # P(3) = 3 combinations of delays (2, 1, 2), (2, 2, 1), and (1, 2, 2) or 3 combinations of delays (1, 2, 1, 2), (2, 1, 1, 2), or (1, 1, 2, 2)
+    # P(4) = 4 combinations of delays (1, 1, 1, 2), (1, 1, 2, 1), (1, 2, 1, 1), or (2, 1, 1, 1) or delays of (1, 1, 1, 1, 2)
+    # P(5) = Delays of (1, 1, 1, 1, 1)
 
-    q_vect[8] <- 3 * (0.5 * 0.5 * 0.5) + 4 * (3 * (0.5 * 0.5 * 0.5)) + 5 * (4 * (0.5 * 0.5 * 0.5 * 0.5)) + 6 * (0.5 * 0.5 * 0.5 * 0.5 * 0.5)
+    two_buses <- 2 * (0.5 * 0.5 * 0.5)
+    three_buses <- 3 * (3 * (0.5 * 0.5 * 0.5) + 3 * (0.5 * 0.5 * 0.5 * 0.5))
+    four_buses <- 4 * (4 * (0.5 * 0.5 * 0.5 * 0.5) + (0.5 * 0.5 * 0.5 * 0.5 * 0.5))
+    five_buses <- 5 * (0.5 * 0.5 * 0.5 * 0.5 * 0.5)
+    q_vect[8] <- two_buses + three_buses + four_buses + five_buses
 
 
     # Var(number of buses leaving the main station by time m)
 
-    q_vect[9] <- ( 9 * (0.5 * 0.5 * 0.5) + 16 * (3 * (0.5 * 0.5 * 0.5)) + 25 * (4 * (0.5 * 0.5 * 0.5 * 0.5)) + 36 * (0.5 * 0.5 * 0.5 * 0.5 * 0.5) ) - q_vect[8]^2
-    q_vect[11] <- (3-q_vect[8])^2 * (0.5 * 0.5 * 0.5) + (4-q_vect[8])^2 * (3 * (0.5 * 0.5 * 0.5)) + (5-q_vect[8])^2 * (4 * (0.5 * 0.5 * 0.5 * 0.5)) + (6-q_vect[8])^2 * (0.5 * 0.5 * 0.5 * 0.5 * 0.5)
-
+    two_buses_squared <- 2^2 * (0.5 * 0.5 * 0.5)
+    three_buses_squared <- 3^2 * (3 * (0.5 * 0.5 * 0.5) + 3 * (0.5 * 0.5 * 0.5 * 0.5))
+    four_buses_squared <- 4^2 * (4 * (0.5 * 0.5 * 0.5 * 0.5) + (0.5 * 0.5 * 0.5 * 0.5 * 0.5))
+    five_buses_squared <- 5^2 * (0.5 * 0.5 * 0.5 * 0.5 * 0.5)
+    q_vect[9] <- (two_buses_squared + three_buses_squared + four_buses_squared + five_buses_squared) - q_vect[8]^2
 
 
     # E(number of buses leaving the main station by time m | W = k)
-    # If only 3 buses leave by t=5, no bus leaves at t=3 (L_1 = 2, L_2 = 2, L_3 = 2)
-    # If only 4 buses leave by t=5, 1 combo without a bus leaving at t=3 (L_1 = 2, L_2 = 2, L_3 = 1)
-    # If only 5 buses leave by t=5, 1 combo without a bus leaving at t=3 (L_1 = 1, L_2 = 1, L_3 = 2, L_4 = 1)
-    # No combo of delay times where 6 buses can leave the station by t=5 and no bus leaves at t=3 and one bus leaves at t=4
+    # (2, 2, 2), (1, 1, 2, 2), (1, 1, 2, 1), (2, 2, 1)
 
-    q_vect[10] <- 3 * (0.5 * 0.5 * 0.5) + 4 * (0.5 * 0.5 * 0.5) + 5 * (0.5 * 0.5 * 0.5 * 0.5)
+    q_vect[10] <- 2 * (0.5 * 0.5 * 0.5) + 3 * (0.5 * 0.5 * 0.5 + 0.5 * 0.5 * 0.5 * 0.5) + 4 * (0.5 * 0.5 * 0.5 * 0.5)
+
+    return(q_vect)
+}
+
+ExactAnalysis <- function() {
+
+    # Settings
+    m <- 5  # Time passenger gets to stop of interest
+    p <- c(0.5, 0.5)  # Probabilities of delay times between successive buses
+    v <- 2  # Time it takes for a bus to reach stop of interest from main station
+
+    # Constants in the quantities we are trying to find
+    k <- 1
+    r <- 3
+    q <- 1
+    
+    # Quantities vector
+    q_vect <- vector(length=2)
+
+    # P(X_2 = r)
+    # = P(L_1 = 1 and L_2 = 2 or L_1 = 2 and L_2 = 1)
+    # = P(L_1 = 1 and L_2 = 2) + P(L_1 = 2 and L_2 = 1)
+    # = P(L_1 = 1) * P(L_2 = 2) + P(L_1 = 2) * P(L_2 = 1)
+
+    q_vect[1] <- 2 * (0.5 * 0.5)
+    
+    # P(W = k | L_1 = q) (probability that passenger has to wait k=1 unit of time given the delay between B_1 and B_2 = q)
+    # W here only has the case where L_1 = 1, L_2 = 1, and L_3 = 2 since L_1 has to be 1
+    # = P(L_2 = 1 and L_3 = 2 | L_1 = 1)
+    # = P(L_2 = 1 and L_3 = 2) (Since L_2 = 1 and L_3 = 2 is independent of L_1 = 1)
+
+    q_vect[2] <- 0.5 * 0.5
 
     return(q_vect)
 }
@@ -113,52 +145,53 @@ ExactAnalysis <- function() {
 # Testing ExactAnalysis
 print(ExactAnalysis())
 
+# Simulates the delays for the day
+generateLVector <- function(p, m) {
 
-busSim <- function(m,p,v,k,r,q,nDays) {
-  
-  q_vect <- c()
-  
-  w_vals <- vector(length=nDays)  # set up space for the Ws
-  x2_vals <- vector(length=nDays)
-  wL_vals <- vector(length=nDays)
-  l1_vals <- vector(length=nDays)
-  pbus_vect <- vector(length=nDays)
-  
-  
-  # Simulation
-  
-  for (day in 1:nDays) {
-    # Generate L values until the passenger has boarded a bus,
-    # then do the analysis using that vector of L values
-    # TODO: See if this works for expected values and variance
-    l_vals <- generateLVector(p, v)
-    w_vals[day] <- generateW(v, p, m,l_vals)
-    # x2_vals[day] <- generateXn(v, p, m, 2)
-    if(l_vals[i]==q) {
-      l1_vals[day] <- w_vals[day]
+    # e.g. if p = (0.2,0.2,0.6), choose 1 number at random from the set
+    # 1,2,3, with probabilities 0.2, 0.2 and 0.6, respectively
+
+    l_vect <- c()
+    tot <- 0
+    i <- 1
+    while (1) {
+        l_vect[i] <- sample(1:length(p),1,prob=p)
+        tot <- tot + l_vect[i]
+        i <- i + 1
+
+        # Passenger got onto the bus
+        if (tot >= m) break
     }
-    pbus_vect <- (left_by_m[day]*left_by_m[day])
-  }
-  
-  
-  # Analysis
-  
-  # P(W = k)
-  q_vect[1] <- mean(w_vals == k)
-  
-  # P(X_2 = r)
-  q_vect[2] <- mean(x2_vals == r)
-  
-  # P(W = k | L1 = q)
-    q_vect[3] <- mean(l1_vals == k)
-  # E(number of buses leaving the main station by time m)
-  q_vect[8] <- mean(left_by_m)
-  # Var(number of buses leaving the main station by time m)
-  q_vect[9] <- mean(pbus_vect)-(q_vect[8]*q_vect[8])
 
-  mean(w_vals)
-  
-  return(q_vect)
+    return(l_vect)
+}
+ 
+# Checks how many buses left by t=m
+checkLeftByM <- function(l_vals, m) {
+    t <- 0
+    for (i in 1:length(l_vals)) {
+        t <- t + l_vals[i]
+
+        # i buses have left by t <= m
+        if (t == m) {
+          return(i)
+        } else if (t > m) {
+          return(i - 1)
+        }
+    }
+}
+
+# Checks which bus the passenger boarded
+checkBusU <- function(l_vals, v, m) {
+
+    # Account for travel time
+    t <- v
+    for (i in 1:length(l_vals)) {
+        t <- t + l_vals[i]
+
+        # Passenger boarded bus i if t >= m
+        if (t >= m) return(i)
+    }
 }
 
 generateW <- function(v,m,l_vals) {
@@ -172,24 +205,78 @@ generateW <- function(v,m,l_vals) {
   return(tot - m)
 }
 
+busSim <- function(m,p,v,k,r,q,nDays) {
 
-generateLVector <- function(p,v,m) {
+    q_vect <- vector(length=10)
+
+    w_vals <- vector(length=nDays)
+    w_vals_squared[day] <- vector(length=nDays)
+    x2_vals <- vector(length=nDays)
+    bus_U_vals <- vector(length=nDays)
+    left_by_m <- vector(length=nDays)
+    l1_vals <- vector(length=nDays)
+    pbus_vect <- vector(length=nDays)
+
+
+    # Simulation
+
+    for (day in 1:nDays) {
+
+        # Generate L values until the passenger has boarded a bus,
+        # then do the analysis using that vector of L values
+
+        l_vals <- generateLVector(p, m)
+        bus_U_vals[day] <- checkBusU(l_vals, v, m)
+        left_by_m[day] <- checkLeftByM(l_vals, m)
+        x2_vals[day] <- sum(l_vals[1:2])
+        w_vals[day] <- generateW(v, p, m,l_vals)
+        w_vals_squared[day] <- w_vals[day]^2
+        if(l_vals[i]==q) {
+          l1_vals[day] <- w_vals[day]
+        }
+        pbus_vect <- (left_by_m[day]*left_by_m[day])
+    }
+
+
+    # Analysis
+
+    # P(W = k)
+    q_vect[1] <- mean(w_vals == k)
   
-  # e.g. if p = (0.2,0.2,0.6), choose 1 number at random from the set
-  # 1,2,3, with probabilities 0.2, 0.2 and 0.6, respectively
+    # P(X_2 = r)
+    q_vect[2] <- mean(x2_vals == r)
   
-  l_vect <- c()
-  tot <- v
-  i <- 1
-  while (true) {
-    l_vect[i] <- sample(1:length(p),1,prob=p)
-    tot <- tot + l_vect[i]
-    i <- i + 1
+    # P(W = k | L1 = q)
+    q_vect[3] <- mean(l1_vals == k)
+
     
-    # Passenger got onto the bus
-    if (tot >= m) break
-  }
-  
-  return(l_vect)
+
+    mean(w_vals)
+
+    # P(W = k | L1 = q)
+
+    # P(U = 3)
+    q_vect[4] <- mean(bus_U_vals == 3)
+    
+     # E(W)
+    q_vect[5] <- mean(wvals)
+    
+    # Var(W)
+    q_vect[6] <- mean(w_vals_squared)
+
+    # E(B_U)
+    q_vect[7] <- mean(bus_U_vals)
+    
+    # E(number of buses leaving the main station by time m)
+    q_vect[8] <- mean(left_by_m)
+
+    # Var(number of buses leaving the main station by time m)
+    q_vect[9] <- mean(pbus_vect)-(q_vect[8]*q_vect[8])
+
+    # E(number of buses leaving the main station by time m | W = k)
+    q_vect[10] <- mean(left_by_m[which(w_vals == k)])
+
+    return(q_vect)
 }
 
+busSim(5, c(0.5, 0.5), 2, 1, 3, 1, 10)
