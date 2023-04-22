@@ -30,9 +30,6 @@ ExactAnalysis <- function() {
     return(q_vect)
 }
 
-# Testing ExactAnalysis
-# print(ExactAnalysis())
-
 
 # Simulates the delays for the day
 generateLVector <- function(p, m) {
@@ -149,5 +146,3 @@ busSim <- function(m,p,v,k,r,q,nDays) {
 
     return(q_vect)
 }
-
-# busSim(5, c(0.5, 0.5), 2, 1, 3, 1, 10)
