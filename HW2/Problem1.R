@@ -1,7 +1,7 @@
 PAMsim <- function(nGen) {
 
   # Starting with first and second nodes linked
-  adjMat <- matrix(nrow=nGen + 2, ncol=nGen + 2)
+  adjMat <- matrix(0, nrow=nGen + 2, ncol=nGen + 2, )
   adjMat[1, 2] <- 1
   adjMat[2, 1] <- 1
 
@@ -32,9 +32,21 @@ PAMsim <- function(nGen) {
   return (simList)
 }
 
-print(PAMsim(5))
-
 PAMemaxd <- function(nGen, nReps) {
 
   # Call PAMsim nReps amount of times and record the max degree for each rep, then mean
+  maxDegrees <- vector(length=nReps)
+  for (i in 1:nReps) {
+    PAM <- PAMsim(nGen)
+    maxDegree <- 0
+    for (j in 1:nGen) {
+      degree <- sum(PAM$adjMat[, j])
+      if (degree > maxDegree) maxDegree <- degree
+    }
+    maxDegrees[i] <- maxDegree
+  }
+
+  return(mean(maxDegrees))
 }
+
+print(PAMemaxd(5, 1000))
