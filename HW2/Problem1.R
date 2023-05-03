@@ -27,6 +27,7 @@ PAMsim <- function(nGen) {
     attachHistory[i - 2] <- attached
   }
 
+  # Put adjMat and attachHistory into a list and name the elements of the list
   simList <- list(adjMat, attachHistory)
   names(simList) <- c("adjMat", "attachHistory")
   return (simList)
@@ -37,16 +38,13 @@ PAMemaxd <- function(nGen, nReps) {
   # Call PAMsim nReps amount of times and record the max degree for each rep, then mean
   maxDegrees <- vector(length=nReps)
   for (i in 1:nReps) {
+    # Simulate PAM
     PAM <- PAMsim(nGen)
-    maxDegree <- 0
-    for (j in 1:nGen) {
-      degree <- sum(PAM$adjMat[, j])
-      if (degree > maxDegree) maxDegree <- degree
-    }
-    maxDegrees[i] <- maxDegree
+    # Find the max degree
+    maxDegrees[i] <- max(apply(PAM$adjMat, 2, sum))
   }
 
   return(mean(maxDegrees))
 }
 
-print(PAMemaxd(5, 1000))
+# print(PAMemaxd(5, 1000))
