@@ -28,8 +28,6 @@ tags <- function(m ,k, s) {
         sum <- sum + tags(m, k-i, s-1)
       }
     }
-    print(k)
-    print(sum)
   }
   # Essentially the formula 1/m * (tags(m, k-1, s-1) + tags(m, k-2, s-1) + ... + tags(m, 1, s-1))
   return(sum*(1/m))
