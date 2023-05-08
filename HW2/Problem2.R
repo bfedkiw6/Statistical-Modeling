@@ -9,7 +9,7 @@ simEVarW <- function(d,v,p,nreps) {
     H <- 0
 
     while (H == 0) {
-      # Host picks door
+      # Tentative host door
       host_result <- sample(1:d,1)
       # Check if door has prize, if not, let host pick that door
       if (length(which(A == host_result)) == 0) {
@@ -45,6 +45,7 @@ simEVarW <- function(d,v,p,nreps) {
   }
 
   return_vect <- vector(length=2)
+
   # E(W)
   return_vect[1] <- sum/nreps
 
@@ -54,4 +55,4 @@ simEVarW <- function(d,v,p,nreps) {
   return(return_vect)
 }
 
-simEVarW(10,c(50,2,79),0.4,10)
+simEVarW(10,c(50,2,79),0.4,1000)
