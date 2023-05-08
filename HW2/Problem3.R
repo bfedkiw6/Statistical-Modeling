@@ -2,6 +2,11 @@ tags <- function(m ,k, s) {
 
   if (m <= 0 || k < 0 || s < 0) {
     return(0)
+  } else if (s == 0) {
+    if (k == 0) {
+      return(1)
+    }
+    return(0)
   } else if (k < s) {
     # No way to get a sum of k if you need to draw more than k tags since s * 1 > k
     # and s * 1 is the minimum sum in s draws
@@ -33,5 +38,3 @@ tags <- function(m ,k, s) {
   return(sum*(1/m))
 
 }
-
-tags(5,4,3)
