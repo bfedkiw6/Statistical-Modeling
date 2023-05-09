@@ -1,17 +1,17 @@
 tags <- function(m ,k, s) {
 
-  if (m <= 0 || k < 0 || s < 0) {
+  if (m <= 0 || k < 0 || s < 0) {  # Edge case
     return(0)
-  } else if (s == 0) {
+  } else if (s == 0) {  # Edge case
     if (k == 0) {
       return(1)
     }
     return(0)
-  } else if (k < s) {
+  } else if (k < s) {  # Base case 1
     # No way to get a sum of k if you need to draw more than k tags since s * 1 > k
     # and s * 1 is the minimum sum in s draws
     return(0)
-  } else if (s == 1) {
+  } else if (s == 1) {  # Base case 2
     if (m >= k) {
       # Cases are tag values k or greater
       # P(tag value = m or m - 1 or m - 2 or ... or k)
