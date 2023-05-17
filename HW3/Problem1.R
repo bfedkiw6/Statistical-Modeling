@@ -36,5 +36,12 @@ qpark <- function(p, d, q) {
 }
 
 rpark <- function(n, p, d) {
-
+  dist <- c()
+  spaces <- c()
+  spaces <- rgeom(n,p)
+  for (i in 1:length(spaces)) {
+    dist[i] <- abs(d - (spaces[i] + 1))
+  }
+  return(dist)
 }
+
