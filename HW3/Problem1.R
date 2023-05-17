@@ -9,11 +9,7 @@ dpark(0.1, 11, 1)
 ppark <- function(p, d, i) {
   sum <- 0
   for (j in 0:i) {
-    if (i == 0) {
-      sum <- sum + ((1-p)^((d-j)-1)*p)
-    } else {
-      sum <- sum + (((1-p)^((d-j)-1)*p) + ((1-p)^((d+j)-1)*p))
-    }
+    sum <- sum + dpark(p, d, j)
   }
   return(sum)
 }
