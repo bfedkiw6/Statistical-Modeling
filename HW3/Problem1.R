@@ -1,6 +1,10 @@
 dpark <- function(p, d, i) {
+
+  if (i == 0) return((1-p)^(d-1) * p)
+
   return(((1-p)^((d-i)-1)*p) + ((1-p)^((d+i)-1)*p))
 }
+dpark(0.1, 11, 1)
 
 ppark <- function(p, d, i) {
   sum <- 0
