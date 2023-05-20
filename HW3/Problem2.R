@@ -2,7 +2,6 @@ boardGame <- function() {
   p <- matrix(rep(0,64),nrow=8)
   onesixth <- 1/6
   onethirtysixth <- 1/36
-  #v <- c(nreps=56)
   # Create transition matrix
   for (i in 1:8) {
     for (j in 1:6) {
