@@ -18,12 +18,13 @@ boardGame <- function() {
       p[i,5:8] <- p[i,5:8] + onethirtysixth
     }
   }
-  #print(p)
+
+  # Get pi vector
   v <- findpi1(p)
+
+  # Winnings = $1, multiply by time spent on square and probability passing 8. Add to not winning which is multiplied by 0 (disappears)
   exp_val <- 1*v[1]*(1/18) + 1*v[2]*(1/18) + 1*v[3]*(4/18) + 1*v[5]*(3/6) + 1*v[6]*(4/6) + 1*v[7]*(5/6) + 1*v[8]*(6/6)
-  print(exp_val)
   exp_val_squared <- 1^2*(v[1]*(1/18) + v[2]*(1/18) + v[3]*(4/18) + v[5]*(3/6) + v[6]*(4/6) + v[7]*(5/6) + v[8]*(6/6)) 
-  print(exp_val_squared)
   var_val <- exp_val_squared - exp_val^2
   return(c(v,exp_val,var_val))
 }
