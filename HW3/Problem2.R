@@ -1,4 +1,3 @@
-# See section 5.4.1 and the die game for examples
 boardGame <- function() {
   p <- matrix(rep(0,64),nrow=8)
   onesixth <- 1/6
@@ -21,9 +20,9 @@ boardGame <- function() {
   }
   #print(p)
   v <- findpi1(p)
-  exp_val <- 1*v[1]*(14/36) + 2*v[2]*(14/36) + 3*v[3]*(20/36) + 5*v[5]*(3/6) + 6*v[6]*(4/6) + 7*v[7]*(5/6) + 8*v[8]*(6/6)
+  exp_val <- 1*v[1]*(1/18) + 1*v[2]*(1/18) + 1*v[3]*(4/18) + 1*v[5]*(3/6) + 1*v[6]*(4/6) + 1*v[7]*(5/6) + 1*v[8]*(6/6)
   print(exp_val)
-  exp_val_squared <- (1^2*v[1]*(14/36) + 2^2*v[2]*(14/36) + 3^2*v[3]*(20/36) + 5^2*v[5]*(3/6) + 6^2*v[6]*(4/6) + 7^2*v[7]*(5/6) + 8^2*v[8]*(6/6)) 
+  exp_val_squared <- 1^2*(v[1]*(1/18) + v[2]*(1/18) + v[3]*(4/18) + v[5]*(3/6) + v[6]*(4/6) + v[7]*(5/6) + v[8]*(6/6)) 
   print(exp_val_squared)
   var_val <- exp_val_squared - exp_val^2
   return(c(v,exp_val,var_val))
