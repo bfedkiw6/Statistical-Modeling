@@ -5,15 +5,19 @@ fillTM <- function(p, q, r, w) {
 
   # Reminder that R uses 1 based indexing
   # First get the transition probabilities for the states with no calls in the waiting room
-  for (i in 1:(r + 1)) {
+  for (i in 1:(r + w + 1)) {
     # Deal with the 1 based indexing to represent the actual value of the state
     start_state <- i - 1
-    # Consider a call coming in and a call not coming in for each possible number of calls terminating
+
     # For no calls in the waiting room, can have 0 calls terminating up to all calls terminating
-    for (num_terminate in 0:start_state) {
+    # If calls in the waiting room, can have 0 calls up to r calls terminating
+    max_terminate <- ifelse(start_state <= r, start_state, r)
+
+    # Consider a call coming in and a call not coming in for each possible number of calls terminating
+    for (num_terminate in 0:max_terminate) {
       # Get probabilities
       # All possible combinations of which "calls" terminating times the probability of that many calls terminating and the rest not terminating
-      terminate_probability <- choose(start_state, num_terminate) * p^num_terminate * (1 - p)^(start_state-num_terminate)
+      terminate_probability <- choose(max_terminate, num_terminate) * p^num_terminate * (1 - p)^(max_terminate-num_terminate)
       incoming_call_probability <-  terminate_probability * q
       no_incoming_call_probability <- terminate_probability * (1 - q)
 
@@ -28,12 +32,6 @@ fillTM <- function(p, q, r, w) {
       trans_mat[i, no_incoming_call_state] <- trans_mat[i, no_incoming_call_state] + no_incoming_call_probability
     }
   }
-
-  # Get the transition probabilities when the waiting room is involved
-  # Can have 0 calls terminating up to r calls terminating
-#  for (i in (r + 2):(r + w + 1)) {
-
-#  }
 
   return(trans_mat)
 }
