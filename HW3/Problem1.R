@@ -1,11 +1,17 @@
 dpark <- function(p, d, i) {
 
   # d-1 fails, p successes for spot at destination
-  if (i == 0) return((1-p)^(d-1) * p)
+  if (i == 0) return((1 - p)^(d - 1) * p)
 
-  # Get probabilities for spots with distances i before and i after the destination
-  return(((1-p)^((d-i)-1)*p) + ((1-p)^((d+i)-1)*p))
+  # Get probability that space d + i is open
+  sum <- (1 - p)^(d + i - 1) * p
+  # Only get probability that space d - i is open if that space exists
+  if (d - i > 0) sum <- sum + (1-p)^(d-i-1) * p
+  return(sum)
 }
+dpark(0.1, 11, 0)
+dpark(0.1, 11, 1)
+dpark(0.1, 11, 16)
 
 ppark <- function(p, d, i) {
   sum <- 0
@@ -23,7 +29,8 @@ qpark <- function(p, d, q) {
     if (j == 0) {
       sum <- sum + ((1-p)^(d-1)*p)
     } else {
-      sum <- sum + ((1-p)^(d-j-1)*p) + ((1-p)^(d+j-1)*p)
+      sum <- sum + (1 - p)^(d + i - 1) * p
+      if (d - i > 0) sum <- sum + (1-p)^(d-i-1) * p
     }
     # See if sum of probabilities reached q
     if (sum > q) {
