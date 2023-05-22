@@ -50,9 +50,11 @@ callCtr <- function(p, q, r, w) {
   pi <- findpi1(trans_mat)
   v <- rep(0, 3)
 
-  # Long run proportion of declined calls = how often in the "max state" and a new call comes in without any calls terminating
-  call_declined_probability <- (1 - p)^(r + w) * q
-  v[1] <- pi[r + w + 1] * call_declined_probability
+  # Long run proportion of declined calls = how often in the "max state"
+  # This is a conditional probability since we're assuming a call comes in, so no need to factor in the probability of a call coming in
+  # Since calls come in at the end of the epoch, the current state already accounts for calls that were terminated,
+  # therefore we don't need to multiply by the probability that no calls terminate
+  v[1] <- pi[r + w + 1]
 
   # Average number of calls on hold calculated using the expected value of number of calls in the waiting room
   # If no waiting room, don't append anything to waiting_room_calls for the waiting room
