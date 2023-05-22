@@ -36,4 +36,4 @@ findpi1 <- function(p) {
   solve(imp,rhs)
 }
 
-boardGame()
+# boardGame()
