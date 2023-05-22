@@ -24,8 +24,8 @@ boardGame <- function() {
   # Winnings = $1, multiply by time spent on square and probability passing 8. Add to not winning which is multiplied by 0 (disappears)
   exp_val <- 1*v[1]*(1/18) + 1*v[2]*(1/18) + 1*v[3]*(4/18) + 1*v[5]*(3/6) + 1*v[6]*((3/6)+(2*(1/18))) + 1*v[7]*((5/6)+(2*(1/18))) + 1*v[8]*((6/6)+(2*(1/18)))
   exp_val_squared <- 1^2*(v[1]*(1/18) + v[2]*(1/18) + v[3]*(4/18) + v[5]*(3/6) + v[6]*((3/6)+(2*(1/18))) + v[7]*((5/6)+(2*(1/18))) + v[8]*((6/6)+(2*(1/18)))) 
-  var_val <- exp_val_squared - exp_val^2
-  return(c(v,exp_val,var_val))
+  var <- exp_val_squared - exp_val^2
+  return(c(v, exp_val, var))
 }
 
 findpi1 <- function(p) {
