@@ -6,7 +6,7 @@ dpark <- function(p, d, i) {
   # Get probability that space d + i is open
   sum <- (1 - p)^(d + i - 1) * p
   # Only get probability that space d - i is open if that space exists
-  if (d - i > 0) sum <- sum + (1-p)^(d-i-1) * p
+  if (d - i > 0) sum <- sum + (1 - p)^(d - i - 1) * p
   return(sum)
 }
 dpark(0.1, 11, 0)
@@ -30,7 +30,7 @@ qpark <- function(p, d, q) {
       sum <- sum + ((1-p)^(d-1)*p)
     } else {
       sum <- sum + (1 - p)^(d + i - 1) * p
-      if (d - i > 0) sum <- sum + (1-p)^(d-i-1) * p
+      if (d - i > 0) sum <- sum + (1 - p)^(d - i - 1) * p
     }
     # See if sum of probabilities reached q
     if (sum > q) {
