@@ -27,7 +27,7 @@ qpark <- function(p, d, q) {
   # Keep adding probabilities of distance j until q is reached
   while (TRUE) {
     if (j == 0) {
-      sum <- sum + ((1-p)^(d-1)*p)
+      sum <- sum + ((1 - p)^(d - 1) * p)
     } else {
       sum <- sum + (1 - p)^(d + i - 1) * p
       if (d - i > 0) sum <- sum + (1 - p)^(d - i - 1) * p
