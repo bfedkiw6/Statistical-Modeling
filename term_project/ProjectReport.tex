@@ -1,14 +1,67 @@
-\documentclass{article}
-\usepackage{graphicx} % Required for inserting images
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}  % Required for inserting images
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{geometry}
+
+\graphicspath{ {./images/} }
+\geometry{margin = 1in}
+\renewcommand{\arraystretch}{1.5}
+
+% Macros
+\newcommand{\onespace}{\hspace*{1ex}}
+\newcommand{\skipline}{\\[2\baselineskip]}
+\newcommand{\tab}{\hspace*{4ex}}
 
 \title{ECS 132 Term Project}
-\author{Ethan Wang}
-\date{May 2023}
+\author{\\ Ethan Wang}
+\date{}
+\pagestyle{fancy}
+\setlength{\headheight}{41.68335pt}
+\setlength\parindent{14pt}
 
 \begin{document}
 
 \maketitle
 
-\section{Introduction}
+% Exponential Family
+
+% Initial Graphs
+\newpage
+\noindent
+\section*{Exponential Family}
+\normalsize
+Initial Histogram and Density Plot
+\\
+\includegraphics[scale=0.6]{jobsnum90_hist}
+\\
+\includegraphics[scale=0.6]{jobsnum90_densityplot}
+
+
+
+% Gamma Family
+\newpage
+\noindent
+\section*{Gamma Family}
+\normalsize
+Beginning of gamma family analysis
+
+% Contribution Section
+\newpage
+\begin{center}
+    \Large
+    Contributions
+\end{center}
+
+\normalsize
+Ethan Wang
+\begin{itemize}[leftmargin=50pt]
+  \item Analysis of exponential and gamma families
+\end{itemize}
+
 
 \end{document}
+
