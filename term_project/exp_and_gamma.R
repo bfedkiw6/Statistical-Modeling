@@ -71,3 +71,17 @@ png(filename='images/prgeng_age_mle.png', bg='white')
 curve(dgamma(x, shape=MLE_gam_r, rate=MLE_gam_lamb), from=0, to=100, col='red', main='Density Estimates of Programmer and Engineer Age with MLE', xlab='Age', ylab='Density')
 lines(density(gam_data), col='blue')
 dev.off()
+
+#MLE vs density with a bandwidth of 4
+png(filename='images/prgeng_age_bandwidth_4.png', bg='white')
+curve(dgamma(x, shape=MLE_gam_r, rate=MLE_gam_lamb), from=0, to=100, col='red', main='Density Estimates with Bandwidth 4 and MLE', xlab='Age', ylab='Density')
+lines(density(gam_data, bw=4), col='blue')
+dev.off()
+
+temp <- exp_data
+temp <- temp[temp <=30]
+new_MM_exp_lamb <- 1 / mean(temp)
+png(filename='images/capital_gain_reduced_mm.png', bg='white')
+curve(dexp(x, rate=new_MM_exp_lamb), from=0, to=30, col='red', main='Density Estimates of Captial Gain (Reduced) with MM', xlab='Capital Gain', ylab='Density')
+lines(density(temp), col='blue')
+dev.off()
