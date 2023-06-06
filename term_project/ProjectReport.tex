@@ -74,16 +74,14 @@ library was used to estimate $\lambda$ instead of using $\frac{\ 1\ }{\overline{
 maximum likelihood estimator, both for consistency across our work and as an extra verification measure. 
 As expected, both estimators yielded a result of about 0.916. The graph of the exponential distribution 
 PDF using the estimated $\lambda$ closely follows that of the density curve of the data, which suggests 
-that an exponential distribution is a suitable approximation for the population density of this dataset. An initial concern was the fact that there was a peak in the original density graph rather than a pure exponential curve and that there was a positive, nonzero density region to the left of zero. However, the exponential distribution is still believed to approximate the dataset well since there are no actual capital gain values less than zero in the dataset and a Google search revealed that the density region to the left of zero in the graph is a result of the kernel density estimation the density function does for the capital gain values equal to zero.
-\\[0.5\baselineskip]
-By reducing the range of the random variables to the interval zero to thirty (creating a ``new" dataset), the resulting gamma PDFs using $\lambda$ estimated by MM/MLE on the new dataset seem to fit the density graph better (see below).
-\\
-\includegraphics[scale=0.9]{capital_gain_reduced_mm}
-\footnotesize
-\\ \**The blue curve is the plot of density() with the reduced range, the red curve uses the new MM estimated $\lambda$ in a plot of dexp()
-\\
-\normalsize
-However, since the nature of the data is unknown, there is no justification for cutting out the larger values from the dataset.
+that an exponential distribution is a suitable approximation for the population density of this dataset. 
+An initial concern was the fact that there was a peak in the original density graph rather than a pure 
+exponential curve and that there was a positive, nonzero density region to the left of zero. However, the 
+exponential distribution is still believed to approximate the dataset well since there are no actual 
+capital gain values less than zero in the dataset and a Google search revealed that the density region to 
+the left of zero in the graph is a result of the kernel density estimation the density function does for 
+the capital gain values equal to zero.
+
 
 % Gamma Family
 \newpage
@@ -137,15 +135,22 @@ have little difference from one method of forming estimators to the other. The g
 distribution PDF using the estimated $\lambda$ and $r$ parameters for each estimation fit the density 
 curve of the dataset well, suggesting that a gamma distribution is a suitable approximation for the 
 population density of this dataset. One concern is that the peaks of both PDFs are slightly to the right 
-of the one in the original density graph. Since the difference in peak locations is pretty small, the suitability of the gamma distribution in approximating the population density of the dataset remains unchanged.
+of the one in the original density graph. Since the difference in peak locations is pretty small, the 
+suitability of the gamma distribution in approximating the population density of the dataset remains 
+unchanged.
 \\[0.5\baselineskip]
-Another concern was the slight dip in the peak of the density graph of the dataset. While playing with the bandwidth parameter, a bandwidth value of four got rid of the dip, as depicted below.
+Another concern was the slight dip in the peak of the density graph of the dataset. While playing with the 
+bandwidth parameter, a bandwidth value of four got rid of the dip, as depicted below.
 \\
 \includegraphics[scale=0.9]{prgeng_age_bandwidth_4}
 \footnotesize
 \\ \**The blue curve is the plot of density() with bw=4, the red curve is the same MLE graph as above \\
 \normalsize
-However, a bandwidth of four felt like too much smoothing since it is very likely that this small dip is a result of sample variability. The reasoning behind this is one, the dip is small enough so that it does not create two peaks, and two, this dataset involves the ages of programmers and engineers, and it seems unlikely that there would be a sudden downward trend in the number of programmers and engineers around the age of 35. This bandwidth setting also makes the MLE and MM graphs less fitting.
+However, a bandwidth of four felt like too much smoothing since it is very likely that this small dip is a 
+result of sample variability. The reasoning behind this is one, the dip is small enough so that it does 
+not create two peaks, and two, this dataset involves the ages of programmers and engineers, and it seems 
+unlikely that there would be a sudden downward trend in the number of programmers and engineers around the 
+age of 35. This bandwidth setting also makes the MLE and MM graphs less fitting.
 
 
 % Contribution Section
