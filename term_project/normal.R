@@ -40,7 +40,7 @@ dev.off()
 
 # MLE
 llnorm <- function(mu,sigma) {
-  loglik <- -(norm_size/2)*(log(2*pi*sigma^2)) + (-1/(2*sigma^2)) * sum((norm_data-mu)^2)
+  loglik <- -(norm_size/2)*(log(2*pi)) - (norm_size * log(sigma)) - (1/(2*sigma^2)) * sum((norm_data-mu)^2)
   return (-loglik)  
 }
 
