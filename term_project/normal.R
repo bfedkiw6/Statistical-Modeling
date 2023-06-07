@@ -5,7 +5,6 @@ library(stats4)
 load('Data/WAMfair/LawschoolBrief.RData', verbose=T)
 norm_data <- lawschoolbrief$LSAT
 norm_size <- length(norm_data)
-print(norm_size)
 
 # Plot the histogram + density
 png(filename='images/Lawschool_LSAT_Density.png', bg='white')
@@ -19,7 +18,6 @@ hist(norm_data, probability=TRUE,main='Density Estimates of Law School LSAT with
 lines(density(norm_data, bw=2), lwd=1, col='blue')
 dev.off()
 
-
 # Analysis
 
 # MM
@@ -27,6 +25,7 @@ MM_norm_mu <- mean(norm_data)
 MM_norm_sigma <- sqrt(mean((norm_data-MM_norm_mu)^2))
 cat("MM Normal Mu:", MM_norm_mu, '\n')
 cat("MM Normal Sigma:", MM_norm_sigma, '\n')
+print(sd(norm_data))
 
 png(filename='images/Lawschool_LSAT_Density_mm.png', bg='white')
 curve(dnorm(x,MM_norm_mu,MM_norm_sigma), from=0, to=300, col='red', main='Density Estimates of Law School LSAT with MM', xlab='LSAT', ylab='Density', ylim=c(0, 0.050))
