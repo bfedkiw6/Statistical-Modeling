@@ -10,7 +10,7 @@ beta_size <- length(weatherdata)
 
 # Beta Family Plots
 png(filename='images/austinweather_densityestimates.png', bg='white')
-png(filename='images/austinweatherdensity_bw0.065.png', bg='white')
+png(filename='images/austinweather_densitybw0.065.png', bg='white')
 hist(beta_data, probability=TRUE, main='Density Estimates of Low Humidity Percentage', xlab='Low Humidity Percentage', ylim=c(0, 2.5),xlim=c(0,1))
 lines(density(beta_data,bw=0.065), lwd=1, col='blue')
 dev.off()
