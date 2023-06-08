@@ -51,3 +51,5 @@ png(filename='images/austinweather_mle.png', bg='white')
 curve(dbeta(x,MLE_beta_alpha,MLE_beta_beta),col="red", main='Density Estimates of Low Humidity Percentage with MLE', xlab='Low Humidity Percentage alpha=3.447276 and beta=4.150187', ylab='Density')
 lines(density(beta_data,bw=0.065), col='blue')
 dev.off()
+
+png(filename='images/austinweather_mmmle.png', bg='white')
