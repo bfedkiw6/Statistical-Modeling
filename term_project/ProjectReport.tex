@@ -18,7 +18,7 @@
 \newcommand{\tab}{\hspace*{4ex}}
 
 \title{ECS 132 Term Project}
-\author{\\ Ethan Wang, Briana Fedkiw}
+\author{\\ Ethan Wang, Briana Fedkiw, Priyal Patel}
 \date{}
 \pagestyle{fancy}
 \setlength{\headheight}{41.68335pt}
@@ -211,6 +211,46 @@ not create two peaks, and two, this dataset involves the ages of programmers and
 unlikely that there would be a sudden downward trend in the number of programmers and engineers around the 
 age of 35. This bandwidth setting also makes the MLE and MM graphs less fitting.
 
+%Beta
+\newpage
+\noindent
+\section*{Beta Distribution}
+\normalsize
+The dataset referenced was "austinweather.csv" from Gruben M on kaggle from $https://www.kaggle.com/datasets/grubenm/austin-weather$.\\ To select a data set, the first criteria checked was the data was contained within [0,1], a primary characteristic of a beta distribution. From the data sets that met the first criteria, the sample with the largest size was selected, n=1317. The Low Humidity Percentage was used for the analysis. Selection bias was present due to two days not having data, which were directly excluded from the data set utilized.\\
+Initial Density Estimates\\
+\includegraphics[scale=0.41]{austinweather_densityestimates.png}
+\footnotesize
+\\ \**The blue curve is the plot of density() \\
+\vstretch{1.2}{\includegraphics[scale=0.32]{austinweather_densitybw0.065.png}}
+\footnotesize
+\\ \**The blue curve is the plot of density() with bw=0.065\\
+As seen above, the histogram appears slightly skewed to the left and density curve is not fully smooth. The small dips in the curve are due to sample variability and by changing the bandwidth to 0.065 this provides a better fit with the MM and MLE graphs.\\
+Using method of moments to estimate ${\alpha}$ and ${\beta}$:\\
+$E(X) = mean(austinweather\$HumidityLowPercent) = 0.44958998$\\
+$var(X) = var(austinweather\$HumidityLowPercent) = 0.02881381$\\
+To find the long run average, $E(X) = {\alpha / (\alpha + \beta)}$.\\ 
+To find variance, $var(X) = {(\alpha*\beta)/ ((\alpha + \beta)^2*(\alpha + \beta + 1)}$.\\
+To solve for $\alpha$ and $\beta$, you can rewrite the expected value equation as $\beta = (\alpha/E(X)) - \alpha$. \\
+Then, replace $\beta$ written in terms of $\alpha$ into the variance equation as \\ $var(X) = {(\alpha*((\alpha/E(X)) - \alpha))/ ((\alpha + ((\alpha/E(X)) - \alpha))^2*(\alpha + ((\alpha/E(X)) - \alpha) + 1)}$.\\ ${\text{MM estimated } \alpha \approx} 3.41157 \tab {\text{MM estimated } \beta \approx} 4.176611$\\
+\includegraphics[scale=0.37]{austinweather_mm.png}
+\footnotesize
+\\ \**The blue curve is the plot of density() with bw=0.065, the red curve uses the MM estimated ${\alpha}$ and ${\beta}$ in a plot of dbeta() \\
+Using method of maximum likelihood to estimate ${\alpha}$ and ${\beta}$:\\
+Log Likelihood Expression Derivation
+\begin{flalign*}
+    \prod^{n}_{i = 1} \frac{{\Gamma(\alpha + \beta)}}{\Gamma(\alpha)\Gamma(\beta)}{X_i^{\alpha-1}(1-X_i)^{\beta-1}} &= (\frac{{\Gamma(\alpha + \beta)}}{\Gamma(\alpha)\Gamma(\beta)})^n \ast \prod^n_{i=1}X_i^{\alpha-1} \ast \prod^n_{i=1}(1-X_i)^{\beta-1}
+    \\ &= \ln((\frac{{\Gamma(\alpha + \beta)}}{\Gamma(\alpha)\Gamma(\beta)})^n \ast \prod^n_{i=1}X_i^{\alpha-1} \ast \prod^n_{i=1}(1-X_i)^{\beta-1}) \\ &= \ln((\frac{{\Gamma(\alpha + \beta)}}{\Gamma(\alpha)\Gamma(\beta)})^n) + \ln(\prod^n_{i=1}X_i^{\alpha-1}) + \ln(\prod^n_{i=1}(1-X_i)^{\beta-1})
+    \\ &= \ln({\Gamma(\alpha + \beta)}^n) - \ln(({\Gamma(\alpha)\Gamma(\beta)})^n) + \ln(\prod^n_{i=1}X_i^{\alpha-1}) + \ln(\prod^n_{i=1}(1-X_i)^{\beta-1}) \\ &= n\ln({\Gamma(\alpha + \beta)}) - n\ln({\Gamma(\alpha)}) - n\ln({\Gamma(\beta)}) + ({\alpha-1})\sum^{n}_{i=1}\ln(X_i) + ({\beta-1})\sum^{n}_{i=1}\ln(1-X_i)\\
+    \text{MLE estimated } \alpha &\approx 3.447276 \\ 
+    \text{MLE estimated } \beta &\approx 4.150187
+\end{flalign*}
+\includegraphics[scale=0.34]{austinweather_mle.png}
+\footnotesize
+\\ \**The blue curve is the plot of density() with bw=0.065, the red curve uses the MLE estimated ${\alpha}$ and ${\beta}$ in a plot of dbeta() \\
+\includegraphics[scale=0.32]{austinweather_mmmle.png}
+\footnotesize
+\\ \**The blue curve is the plot of density() with bw=0.065, the red curve uses the MLE estimated ${\alpha}$ and ${\beta}$ in a plot of dbeta(), the green curves uses the MM estimated ${\alpha}$ and ${\beta}$ in a plot of dbeta() \\
+\normalsize After superimposing the both MM and MLE estimation beta density curves on the density estimation, the curves all appeared to be concave down and the input x-values were contained within [0,1]. Both density estimate with MM and MLE graphs provide evidence that the density curve for the data set approximately represents a beta distribution. However, it is important to note that the MM and MLE estimation beta density curves both lean towards symmetric more than the density curve. There are smaller densities for higher percentage of low humidity for the density curve, exemplifying the variability of low humidity in Austin. For the smaller percentage of low humidity for the density curve, the density estimate with MM and MLE curves closer approximate the density curve for the data set. There is a small difference for the estimated values for ${\alpha}$ and ${\beta}$ between the MM and MLE estimation methods. For MM method estimates, ${\alpha \approx} 3.41157$ and ${\beta \approx} 4.176611$. For MLE method estimates, ${\alpha \approx} 3.447276$ and ${\beta \approx} 4.150187$. The graph that contains all the density curves demonstrates the close estimates of ${\alpha}$ and ${\beta}$ by both MM and MLE methods, proving that both are similar comparisons to determine if the density curve of the data set approximates a beta distribution. Further, the number of successes is described as ${\alpha -1}$ and the number of failures as ${\beta - 1}$. The estimated ${\alpha}$ and ${\beta}$ from the MM and MLE methods reveal the approximate number of successes and failures. Based on ${\alpha}$ and ${\beta}$ values, a beta distribution can take a diverse array of shapes. The concave down and approximately bell-shaped look of all the curves demonstrates that the density curve for the data set compared to the beta density curves from estimation methods MM and MLE parameters approximately fits a beta distribution.\\ 
 
 % Contribution Section
 \newpage
@@ -219,18 +259,30 @@ age of 35. This bandwidth setting also makes the MLE and MM graphs less fitting.
 \end{center}
 
 \normalsize
+Briana Fedkiw
+\begin{itemize}[leftmargin=50pt]
+  \item Normal distribution (data and analysis)
+  \item R code in normal.R
+\end{itemize}
+
 Ethan Wang
 \begin{itemize}[leftmargin=50pt]
   \item Exponential and gamma distributions (data and analysis)
   \item R code in exp\_and\_gamma.R
 \end{itemize}
 
-Briana Fedkiw
+Priyal Patel
 \begin{itemize}[leftmargin=50pt]
-  \item Normal distributions (data and analysis)
-  \item R code in normal.R
+  \item Beta distribution (data and analysis)
+  \item R code in beta.R
 \end{itemize}
 
+Group
+\begin{itemize}[leftmargin=50pt]
+  \item Discussed each data set and calculations of MM and MLE
+\end{itemize}
+
+\end{document}
 
 \end{document}
 
