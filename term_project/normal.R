@@ -14,7 +14,7 @@ dev.off()
 
 # Play with Bin width
 png(filename='images/Lawschool_LSAT_Density_bw.png', bg='white')
-hist(norm_data, probability=TRUE,main='Density Estimates of Law School LSAT with Bin Width of 2', xlab='LSAT', ylim=c(0, 0.050))
+hist(norm_data, probability=TRUE,main='Density Estimates of Law School LSAT with Bandwidth of 2', xlab='LSAT', ylim=c(0, 0.050))
 lines(density(norm_data, bw=2), lwd=1, col='blue')
 dev.off()
 
