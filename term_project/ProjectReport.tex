@@ -57,9 +57,9 @@ Using method of moments to estimate $\mu$ and $\sigma$
 \footnotesize
 \**The blue curve is the plot of density(), the red curve uses the MM estimated $\mu$ and $\sigma$ in a plot of dnorm() \\
 \normalsize
-By using the sample mean $\overline{A}$ as an unbiased estimator of $\mu$ and $S^2$ as a biased estimator of $\sigma^2$, one can find $\mu$ and $\sigma$ from method of moments and graph the corresponding density function. As seen above, the graph using the estimated $\mu$ and $\sigma$ values closely matches the original density function of the data, implying that a normal distribution can approximate the population density of the data. However, one potential issue is the MM estimated curve peaks slightly before the density curve due to the dip. This will be addressed in changing the bin width. Overall, the normal distribution is still fairly accurate at approximating the population density of the dataset. Now, change the bin width to 2.   \\
+By using the sample mean $\overline{A}$ as an unbiased estimator of $\mu$ and $S^2$ as a biased estimator of $\sigma^2$, one can find $\mu$ and $\sigma$ from method of moments and graph the corresponding density function. As seen above, the graph using the estimated $\mu$ and $\sigma$ values closely matches the original density function of the data, implying that a normal distribution can approximate the population density of the data. However, one potential issue is the MM estimated curve peaks slightly before the density curve due to the dip. This can be addressed by changing bin width. Overall, the normal distribution is still fairly accurate at approximating the population density of the dataset. Now, change the bin width to 2.   \\
 \includegraphics[scale=0.85]{Lawschool_LSAT_Density_mmbw} \\
-Although the density graph is now smoother and the peaks are more aligned, its peak is now farther away from the peak of the MM estimated density graph. Each case has its pros and cons, so it is hard to define which one is better to compare to MM. Overall, due to how close the MM estimated curve matches either the default density curve or altered one, a normal distribution is still a good approximator for the population density. 
+Although the density graph is now smoother and the peaks are more aligned, its peak is now farther away from the peak of the MM estimated density graph. Each case has its pros and cons, so it is hard to define which one is better to compare to MM. Due to how close the MM estimated curve matches either the default density curve or altered one, a normal distribution is still a good approximator for the population density. 
 
 \newpage
 \noindent
@@ -81,12 +81,12 @@ Log Likelihood Expression Derivation
 \normalsize
 By using the density function of the normal distribution, $\mu$ and $\sigma$ can be estimated from method of maximum likelihood and graph the corresponding density function. As seen above, the graph using the estimated $\mu$ and $\sigma$ values closely matches the original density function of the data, very similarly to the MM estimation. One can conclude that a normal distribution can approximate the population density of the data. Once again, the same issue of the location of the peak as seen in MM estimation exists in MLE. Now, change the bin width to 2 just like in MM.   \\
 \includegraphics[scale=0.85]{Lawschool_LSAT_Density_mlebw} \\
-Once again each case has its pros and cons, so it is hard to define which one is better to compare to MLE. Overall, a normal distribution is still a good approximator for the population density. 
+Once again each case has its pros and cons, so it is hard to define which one is better to compare to MLE. So, a normal distribution is still a good approximator for the population density. 
 
 \newpage
 \noindent
 In both the MM and MLE estimation methods, the values for $\mu$ and $\sigma$ were fairly close to one another. When looking at a normal distribution, one looks at the parameters of population mean and variance, $\mu$ and $\sigma^2$. From the data, the mean is $156.1726$ and the variance is $ 8.62219^2 \approx 74.34216$. Both our MM and MLE estimation methods had values of $\mu$ and $\sigma^2$ extremely close or even the same as the dataset. When looking at how much the estimated values differed from the dataset values, the difference was very small. For MM, the difference for $\mu$ was $\approx 0$ and for $\sigma$ was $\approx 0.000045$. For MLE, the difference for $\mu$ was $\approx 0.0001$ and for $\sigma$ was $\approx 0.000267$. Since the differences are so small, they support the fact that this dataset follows a normal distribution. \\
-Overall, a normal distribution is a great approximator of population density for this dataset.  
+In summary, a normal distribution is a great approximator of population density for this dataset.  
 
 % Exponential Family
 \newpage
@@ -280,7 +280,8 @@ Priyal Patel
 
 Group
 \begin{itemize}[leftmargin=50pt]
-  \item Discussed each data set and calculations of MM and MLE
+  \item Presented our datasets to each other and explained why the distributions were a good fit for the datasets
+  \item Worked together on the derivations of the method of moments estimators and maximum likelihood estimators for our distributions
 \end{itemize}
 
 \end{document}
