@@ -96,9 +96,13 @@ In summary, a normal distribution is a great approximator of population density 
 The dataset ``adult\$capital\_gain" from fairml in the FairMLCourse repo seems to follow an exponential distribution PDF's shape \\
 Initial Density Estimates\\
 \includegraphics[scale=0.9]{capital_gain_density_estimates}
-\newpage
-\noindent
-Using method of moments to estimate $\lambda$
+\footnotesize
+\\ \**The blue curve is a plot of density()
+\\[2\baselineskip]
+\normalsize
+An initial concern with the dataset was the fact that there was a peak in the original density graph rather than a pure exponential curve and that there was a positive, nonzero density region to the left of zero. However, the exponential distribution is still believed to approximate the dataset well since there are no actual capital gain values less than zero in the dataset and a Google search revealed that the density region to the left of zero in the graph is a result of the kernel density estimation the density function does for the capital gain values equal to zero.
+\skipline
+Using the method of moments to estimate $\lambda$
 \begin{flalign*}
     E(X) &= \frac{1}{\lambda}, L = \lambda\\
     \overline{A} &= \frac{1}{L}\\
@@ -107,10 +111,11 @@ Using method of moments to estimate $\lambda$
 \end{flalign*}
 \includegraphics[scale=0.9]{capital_gain_mm}
 \footnotesize
-\\ \**The blue curve is the plot of density(), the red curve uses the MM estimated $\lambda$ in a plot of dexp()
+\\ \**The blue curve is the plot of density(), the red curve uses the MM estimated $\lambda$ in a plot of dexp() \\
+\normalsize
+The graph of the exponential PDF using the method of moments estimated $\lambda$ of about 0.916 fits the shape of the original density curve really well for capital gains greater than zero.
 \newpage
 \noindent
-\normalsize
 Using method of maximum likelihood to estimate $\lambda$\\
 Log Likelihood Expression Derivation
 \begin{flalign*}
@@ -123,24 +128,13 @@ Log Likelihood Expression Derivation
 \end{flalign*}
 \includegraphics[scale=0.9]{capital_gain_mle}
 \footnotesize
-\\ \**The blue curve is the plot of density(), the red curve uses the MLE estimated $\lambda$ in a plot of dexp()
+\\ \**The blue curve is the plot of density(), the red curve uses the MLE estimated $\lambda$ in a plot of dexp() \\
+\normalsize
+The maximum likelihood estimated $\lambda$ is about 0.916, which is equal to the method of moments estimated $\lambda$. Therefore, the graph above is the same as the graph in the method of moments section, and still shows that the exponential distribution fits the dataset well.
 \newpage
 \noindent
 \normalsize
-In Professor Matloff's fastStat lesson, ``MLEMM: General Methods of Estimation," both the method of 
-moments estimator and the maximum likelihood estimator for the parameter $\lambda$ of an exponential 
-distribution was $\frac{\ 1\ }{\overline{A}}$. However, the mle function from the stats4 
-library was used to estimate $\lambda$ instead of using $\frac{\ 1\ }{\overline{A}}$ directly for the 
-maximum likelihood estimator, both for consistency across our work and as an extra verification measure. 
-As expected, both estimators yielded a result of about 0.916. The graph of the exponential distribution 
-PDF using the estimated $\lambda$ closely follows that of the density curve of the data, which suggests 
-that an exponential distribution is a suitable approximation for the population density of this dataset. 
-An initial concern was the fact that there was a peak in the original density graph rather than a pure 
-exponential curve and that there was a positive, nonzero density region to the left of zero. However, the 
-exponential distribution is still believed to approximate the dataset well since there are no actual 
-capital gain values less than zero in the dataset and a Google search revealed that the density region to 
-the left of zero in the graph is a result of the kernel density estimation the density function does for 
-the capital gain values equal to zero.
+In Professor Matloff's fastStat lesson, ``MLEMM: General Methods of Estimation," both the method of moments estimator and the maximum likelihood estimator for the parameter $\lambda$ of an exponential distribution was $\frac{\ 1\ }{\overline{A}}$. However, the mle function from the stats4 library was still used to estimate $\lambda$ instead of using $\frac{\ 1\ }{\overline{A}}$ directly for the maximum likelihood estimator, both for consistency across our work and as an extra verification measure. As expected, both estimators yielded a result of about 0.916. The graph of the exponential distribution PDF using the estimated $\lambda$ closely follows that of the density curve of the data, as shown above, which suggests that an exponential distribution is a suitable approximation for the population density of this dataset. Another concern with this dataset was the smaller bumps at around eight and seventeen for the capital gain. The most likely cause of these bumps is sampling variability, with this sample having a bit more adults around those capital gain values than normal. Adjusting the bandwidth of the density function was deemed not appropriate for this dataset because further smoothing caused the peak at a capital gain of zero to become a lot smaller, which adjusts the density a bit too much without justification.
 
 
 % Gamma Family
@@ -212,49 +206,59 @@ not create two peaks, and two, this dataset involves the ages of programmers and
 unlikely that there would be a sudden downward trend in the number of programmers and engineers around the 
 age of 35. This bandwidth setting also makes the MLE and MM graphs less fitting.
 
+
 %Beta
 \newpage
 \noindent
 \section*{Beta Distribution}
 \normalsize
-The dataset referenced was "austinweather.csv" from Gruben M on kaggle from $https://www.kaggle.com/datasets/grubenm/austin-weather$.\\ To select a data set, the first criteria checked was the data was contained within [0,1], a primary characteristic of a beta distribution. From the data sets that met the first criteria, the sample with the largest size was selected, n=1317. The Low Humidity Percentage was used for the analysis. Selection bias was present due to two days not having data, which were directly excluded from the data set utilized.\\
+The dataset referenced was "austinweather.csv" from Gruben M on kaggle from \\ https://www.kaggle.com/datasets/grubenm/austin-weather. \\
+To select a data set, the first criteria checked was the data was contained within [0,1], a primary characteristic of a beta distribution. From the data sets that met the first criteria, the sample with the largest size was selected, n=1317. The Low Humidity Percentage was used for the analysis. Selection bias was present due to two days not having data, which were directly excluded from the data set utilized.
+\\[0.5\baselineskip]
 Initial Density Estimates\\
-\includegraphics[scale=0.41]{austinweather_densityestimates.png}
+\includegraphics[scale=0.40]{austinweather_densityestimates.png}
 \footnotesize
 \\ \**The blue curve is the plot of density() \\
-\vstretch{1.2}{\includegraphics[scale=0.32]{austinweather_densitybw0.065.png}}
-\footnotesize
-\\ \**The blue curve is the plot of density() with bw=0.065\\
-As seen above, the histogram appears slightly skewed to the left and density curve is not fully smooth. The small dips in the curve are due to sample variability and by changing the bandwidth to 0.065 this provides a better fit with the MM and MLE graphs.\\
-Using method of moments to estimate ${\alpha}$ and ${\beta}$:\\
+\includegraphics[scale=0.35]{austinweather_densitybw0.065.png}
+\\ \**The blue curve is the plot of density() with bw=0.065 \\
+\normalsize
+As seen above, the histogram appears slightly skewed to the left and density curve is not fully smooth. The small dips in the curve are due to sample variability and by changing the bandwidth to 0.065 this provides a better fit with the MM and MLE graphs.
+\\[0.5\baselineskip]
+Using method of moments to estimate ${\alpha}$ and ${\beta}$\\
 $E(X) = mean(austinweather\$HumidityLowPercent) = 0.44958998$\\
 $var(X) = var(austinweather\$HumidityLowPercent) = 0.02881381$\\
 To find the long run average, $E(X) = {\alpha / (\alpha + \beta)}$.\\ 
 To find variance, $var(X) = {(\alpha*\beta)/ ((\alpha + \beta)^2*(\alpha + \beta + 1)}$.\\
 To solve for $\alpha$ and $\beta$, you can rewrite the expected value equation as $\beta = (\alpha/E(X)) - \alpha$. \\
-Then, replace $\beta$ written in terms of $\alpha$ into the variance equation as \\ $var(X) = {(\alpha*((\alpha/E(X)) - \alpha))/ ((\alpha + ((\alpha/E(X)) - \alpha))^2*(\alpha + ((\alpha/E(X)) - \alpha) + 1)}$.\\ ${\text{MM estimated } \alpha \approx} 3.41157 \tab {\text{MM estimated } \beta \approx} 4.176611$\\
-\includegraphics[scale=0.37]{austinweather_mm.png}
+Then, replace $\beta$ written in terms of $\alpha$ into the variance equation as \\ $var(X) = {(\alpha*((\alpha/E(X)) - \alpha))/ ((\alpha + ((\alpha/E(X)) - \alpha))^2*(\alpha + ((\alpha/E(X)) - \alpha) + 1)}$.\\ $\text{MM estimated } \alpha \approx 3.41157 \tab \text{MM estimated } \beta \approx 4.176611$\\
+\includegraphics[scale=0.45]{austinweather_mm.png}
 \footnotesize
-\\ \**The blue curve is the plot of density() with bw=0.065, the red curve uses the MM estimated ${\alpha}$ and ${\beta}$ in a plot of dbeta() \\
-Using method of maximum likelihood to estimate ${\alpha}$ and ${\beta}$:\\
+\\ \**The blue curve is the plot of density() with bw=0.065, the red curve uses the MM estimated ${\alpha}$ and ${\beta}$ in a plot of dbeta()
+\newpage
+\noindent
+\normalsize
+Using method of maximum likelihood to estimate ${\alpha}$ and ${\beta}$\\
 Log Likelihood Expression Derivation
 \begin{flalign*}
-    \prod^{n}_{i = 1} \frac{{\Gamma(\alpha + \beta)}}{\Gamma(\alpha)\Gamma(\beta)}{X_i^{\alpha-1}(1-X_i)^{\beta-1}} &= (\frac{{\Gamma(\alpha + \beta)}}{\Gamma(\alpha)\Gamma(\beta)})^n \ast \prod^n_{i=1}X_i^{\alpha-1} \ast \prod^n_{i=1}(1-X_i)^{\beta-1}
-    \\ &= \ln((\frac{{\Gamma(\alpha + \beta)}}{\Gamma(\alpha)\Gamma(\beta)})^n \ast \prod^n_{i=1}X_i^{\alpha-1} \ast \prod^n_{i=1}(1-X_i)^{\beta-1}) \\ &= \ln((\frac{{\Gamma(\alpha + \beta)}}{\Gamma(\alpha)\Gamma(\beta)})^n) + \ln(\prod^n_{i=1}X_i^{\alpha-1}) + \ln(\prod^n_{i=1}(1-X_i)^{\beta-1})
-    \\ &= \ln({\Gamma(\alpha + \beta)}^n) - \ln(({\Gamma(\alpha)\Gamma(\beta)})^n) + \ln(\prod^n_{i=1}X_i^{\alpha-1}) + \ln(\prod^n_{i=1}(1-X_i)^{\beta-1}) \\ &= n\ln({\Gamma(\alpha + \beta)}) - n\ln({\Gamma(\alpha)}) - n\ln({\Gamma(\beta)}) + ({\alpha-1})\sum^{n}_{i=1}\ln(X_i) + ({\beta-1})\sum^{n}_{i=1}\ln(1-X_i)\\
-    \text{MLE estimated } \alpha &\approx 3.447276 \\ 
+    \prod^{n}_{i = 1} \frac{{\Gamma(\alpha + \beta)}}{\Gamma(\alpha)\Gamma(\beta)}{X_i^{\alpha-1}(1-X_i)^{\beta-1}} &= (\frac{{\Gamma(\alpha + \beta)}}{\Gamma(\alpha)\Gamma(\beta)})^n \ast \prod^n_{i=1}X_i^{\alpha-1} \ast \prod^n_{i=1}(1-X_i)^{\beta-1} \\
+    &= \ln((\frac{{\Gamma(\alpha + \beta)}}{\Gamma(\alpha)\Gamma(\beta)})^n \ast \prod^n_{i=1}X_i^{\alpha-1} \ast \prod^n_{i=1}(1-X_i)^{\beta-1}) \\ &= \ln((\frac{{\Gamma(\alpha + \beta)}}{\Gamma(\alpha)\Gamma(\beta)})^n) + \ln(\prod^n_{i=1}X_i^{\alpha-1}) + \ln(\prod^n_{i=1}(1-X_i)^{\beta-1}) \\
+    &= \ln({\Gamma(\alpha + \beta)}^n) - \ln(({\Gamma(\alpha)\Gamma(\beta)})^n) + \ln(\prod^n_{i=1}X_i^{\alpha-1}) \\
+    &\phantom{=\hspace{1ex}}+ \ln(\prod^n_{i=1}(1-X_i)^{\beta-1}) \\
+    &= n\ln({\Gamma(\alpha + \beta)}) - n\ln({\Gamma(\alpha)}) - n\ln({\Gamma(\beta)}) \\
+    &\phantom{=\hspace{1ex}}+ ({\alpha-1})\sum^{n}_{i=1}\ln(X_i) + ({\beta-1})\sum^{n}_{i=1}\ln(1-X_i) \\
+    \text{MLE estimated } \alpha &\approx 3.447276 \\
     \text{MLE estimated } \beta &\approx 4.150187
 \end{flalign*}
-\includegraphics[scale=0.34]{austinweather_mle.png}
+\includegraphics[scale=0.40]{austinweather_mle.png}
 \footnotesize
 \\ \**The blue curve is the plot of density() with bw=0.065, the red curve uses the MLE estimated ${\alpha}$ and ${\beta}$ in a plot of dbeta() \\
 \normalsize 
-Based on ${\alpha}$ and ${\beta}$ values, a beta distribution can take a diverse array of shapes. After superimposing both MM and MLE estimations of ${\alpha}$ and ${\beta}$ for beta density curves on the density curve from the data set, the curves all appeared to be concave down and approximately bell-shaped in nature. For all the graphs, the input x-values were contained within [0,1]. Both density estimates with MM and MLE graphs provide evidence that the density curve for the data set approximately represents a beta distribution. However, it is important to note that the MM and MLE estimation beta density curves both lean towards symmetric more than the density curve. There are smaller densities for higher percentage of low humidity for the density curve, exemplifying the variability of low humidity in Austin. For the smaller percentage of low humidity for the density curve, the density estimate with MM and MLE curves closer approximate the density curve for the data set. 
-\includegraphics[scale=0.32]{austinweather_mmmle.png}
+Based on ${\alpha}$ and ${\beta}$ values, a beta distribution can take a diverse array of shapes. After superimposing both MM and MLE estimations of ${\alpha}$ and ${\beta}$ for beta density curves on the density curve from the data set, the curves all appeared concave down and approximately bell-shaped in nature. For each graph, the input x-values were within [0,1]. Both density estimates with MM and MLE provide evidence that a beta distribution approximates the dataset well. However, an important fact is that the MM and MLE estimated beta density curves lean towards being symmetric more than the density curve. There are smaller densities for the higher percentages of low humidity for the density curve, exemplifying the variability of low humidity in Austin. For the smaller percentages of low humidity, the MM and MLE curves better approximate the density curve for the dataset. 
+\includegraphics[scale=0.40]{austinweather_mmmle.png}
 \footnotesize
 \\ \**The blue curve is the plot of density() with bw=0.065, the red curve uses the MLE estimated ${\alpha}$ and ${\beta}$ in a plot of dbeta(), the green curves uses the MM estimated ${\alpha}$ and ${\beta}$ in a plot of dbeta() \\
 \normalsize 
-There is a small difference for the estimated values for ${\alpha}$ and ${\beta}$ between the MM and MLE estimation methods. For MM method estimates, ${\alpha \approx} 3.41157$ and ${\beta \approx} 4.176611$. For MLE method estimates, ${\alpha \approx} 3.447276$ and ${\beta \approx} 4.150187$. The graph that contains all the density curves demonstrates the close estimates of ${\alpha}$ and ${\beta}$ by both MM and MLE methods, proving that both are similar comparisons to determine if the density curve of the data set approximates a beta distribution.\\
+There is a small difference for the estimated values for ${\alpha}$ and ${\beta}$ between the MM and MLE estimation methods. For MM method estimates, $\alpha \approx 3.41157$ and $\beta \approx 4.176611$. For MLE method estimates, $\alpha \approx 3.447276$ and $\beta \approx 4.150187$. The graph that contains all the density curves demonstrates the close estimates of ${\alpha}$ and ${\beta}$ by both MM and MLE methods, proving that both are similar comparisons to determine if the density curve of the data set approximates a beta distribution.
 
 % Contribution Section
 \newpage
@@ -288,6 +292,3 @@ Group
 \end{itemize}
 
 \end{document}
-
-\end{document}
-
