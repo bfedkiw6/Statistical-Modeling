@@ -72,8 +72,15 @@ curve(dgamma(x, shape=MLE_gam_r, rate=MLE_gam_lamb), from=0, to=100, col='red', 
 lines(density(gam_data), col='blue')
 dev.off()
 
-#MLE vs density with a bandwidth of 4
+# MLE vs density with a bandwidth of 4
 png(filename='images/prgeng_age_bandwidth_4.png', bg='white')
 curve(dgamma(x, shape=MLE_gam_r, rate=MLE_gam_lamb), from=0, to=100, col='red', main='Density Estimates with Bandwidth 4 and MLE', xlab='Age', ylab='Density')
 lines(density(gam_data, bw=4), col='blue')
+dev.off()
+
+# MLE vs MM vs density
+png(filename='images/prgeng_age_mm_mle_density.png', bg='white')
+curve(dgamma(x, shape=MLE_gam_r, rate=MLE_gam_lamb), from=0, to=100, col='red', main='Density Estimates of Capital Gain with MM and MLE', xlab='Capital Gain', ylab='Density')
+curve(dgamma(x, shape=MM_gam_r, rate=MM_gam_lamb), from=0, to=100, add=TRUE, col='green')
+lines(density(gam_data), col='blue')
 dev.off()
