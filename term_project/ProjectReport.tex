@@ -225,14 +225,14 @@ Using method of moments (MM) to estimate ${\alpha}$ and ${\beta}$
 \begin{center}
     E(X) = mean(austinweather\$HumidityLowPercent) = 0.44958998\\ 
     var(X) = var(austinweather\$HumidityLowPercent) = 0.02881381\\
-    E(X) = {\alpha / (\alpha + \beta)}\\ 
-    \beta = (\alpha/E(X)) - \alpha \\
-    var(X) = {(\alpha*\beta)/ ((\alpha + \beta)^2*(\alpha + \beta + 1))}\\ 
-    var(X) = {(\alpha*((\alpha/E(X)) - \alpha))/ ((\alpha + ((\alpha/E(X)) - \alpha))^2*(\alpha + ((\alpha/E(X)) - \alpha) + 1))}\\ 
-    0 = -var(X) + {(\alpha*((\alpha/E(X)) - \alpha))/ ((\alpha + ((\alpha/E(X)) - \alpha))^2*(\alpha + ((\alpha/E(X)) - \alpha) + 1))}\\ 
-    \text{MM estimated } \alpha \approx 3.41157\\ 
-    \beta = (3.41157/0.44958998) - 3.41157\\ 
-    \text{MM estimated } \beta \approx 4.176611\\
+    $E(X) = {\alpha / (\alpha + \beta)}$\\ 
+    $\beta = (\alpha/E(X)) - \alpha$ \\
+    $var(X) = {(\alpha*\beta)/ ((\alpha + \beta)^2*(\alpha + \beta + 1))}$\\ 
+    $var(X) = {(\alpha*((\alpha/E(X)) - \alpha))/ ((\alpha + ((\alpha/E(X)) - \alpha))^2*(\alpha + ((\alpha/E(X)) - \alpha) + 1))}$\\ 
+    $0 = -var(X) + {(\alpha*((\alpha/E(X)) - \alpha))/ ((\alpha + ((\alpha/E(X)) - \alpha))^2*(\alpha + ((\alpha/E(X)) - \alpha) + 1))}$\\ 
+    $\text{MM estimated } \alpha \approx 3.41157$\\ 
+    $\beta = (3.41157/0.44958998) - 3.41157$\\ 
+    $\text{MM estimated } \beta \approx 4.176611$\\
 \end{center}
 To solve for $\alpha$ and $\beta$, you can rewrite the expected value equation in terms of $\beta$. Then, replace $\beta$ written in terms of $\alpha$ into the variance equation and solve for $\alpha$. Lastly, use the $\alpha$ and E(X) values to solve for $\beta$ in the expected value equation.\\
 \includegraphics[scale=0.45]{austinweather_mm.png}
